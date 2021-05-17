@@ -254,27 +254,28 @@ class _ChannelListViewState extends State<ChannelListView> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Let’s start chatting!',
+                        'You can message your Mutual Crushes, so start Crushing!',
+                        //'Let’s start chatting!',
                         style: StreamChatTheme.of(context).textTheme.headline,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 52,
-                      ),
-                      child: Text(
-                        'How about sending your first message to a friend?',
-                        textAlign: TextAlign.center,
-                        style: StreamChatTheme.of(context)
-                            .textTheme
-                            .body
-                            .copyWith(
-                              color:
-                                  StreamChatTheme.of(context).colorTheme.grey,
-                            ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     vertical: 8.0,
+                    //     horizontal: 52,
+                    //   ),
+                    //   child: Text(
+                    //     'How about sending your first message to a friend?',
+                    //     textAlign: TextAlign.center,
+                    //     style: StreamChatTheme.of(context)
+                    //         .textTheme
+                    //         .body
+                    //         .copyWith(
+                    //           color:
+                    //               StreamChatTheme.of(context).colorTheme.grey,
+                    //         ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
