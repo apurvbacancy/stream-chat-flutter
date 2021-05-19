@@ -244,12 +244,9 @@ class _ChannelListViewState extends State<ChannelListView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // StreamSvgIcon.message(
-                    //   size: 90,
-                    //   color: StreamChatTheme.of(context)
-                    //       .colorTheme
-                    //       .greyGainsboro,
-                    // ),
+                    StreamSvgIcon.message_new(
+                      size: 90,
+                    ),
                     Image.asset(
                       ImageAssets.message_placeholder,
                       width: 90,
