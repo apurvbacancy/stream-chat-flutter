@@ -247,11 +247,6 @@ class _ChannelListViewState extends State<ChannelListView> {
                     StreamSvgIcon.message_new(
                       size: 90,
                     ),
-                    Image.asset(
-                      ImageAssets.message_placeholder,
-                      width: 90,
-                      height: 90,
-                    ),
                     SizedBox(height: 8),
                     Padding(
                       padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
