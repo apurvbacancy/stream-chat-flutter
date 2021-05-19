@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stream_chat_flutter/src/stream_svg_icon.dart';
 import 'package:stream_chat_flutter/src/utils.dart';
 import 'package:stream_chat_flutter/utils/color_assets.dart';
+import 'package:stream_chat_flutter/utils/image_assets.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../stream_chat_flutter.dart';
@@ -243,15 +244,18 @@ class _ChannelListViewState extends State<ChannelListView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    StreamSvgIcon.message(
-                      size: 90,
-                      color: StreamChatTheme.of(context)
-                          .colorTheme
-                          .greyGainsboro,
+                    // StreamSvgIcon.message(
+                    //   size: 90,
+                    //   color: StreamChatTheme.of(context)
+                    //       .colorTheme
+                    //       .greyGainsboro,
+                    // ),
+                    Image.asset(
+                      ImageAssets.message_placeholder,
                     ),
                     SizedBox(height: 8),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(52, 0, 52, 0),
+                      padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
                       child: Text(
                         'You can message your Mutual Crushes, so start Crushing!',
                         textAlign: TextAlign.center,
