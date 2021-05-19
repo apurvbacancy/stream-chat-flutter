@@ -252,6 +252,8 @@ class _ChannelListViewState extends State<ChannelListView> {
                     // ),
                     Image.asset(
                       ImageAssets.message_placeholder,
+                      width: 90,
+                      height: 90,
                     ),
                     SizedBox(height: 8),
                     Padding(
@@ -262,8 +264,9 @@ class _ChannelListViewState extends State<ChannelListView> {
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             color: ColorAssets.colorPink,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5),
                       ),
                     ),
                   ],
