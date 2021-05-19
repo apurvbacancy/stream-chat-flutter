@@ -68,7 +68,7 @@ class ChannelListView extends StatefulWidget {
     this.separatorBuilder,
     this.onImageTap,
     this.onStartChatPressed,
-    this.swipeToAction = false,
+    this.swipeToAction = true,
     this.pullToRefresh = true,
     this.crossAxisCount = 1,
     this.padding,
@@ -503,13 +503,13 @@ class _ChannelListViewState extends State<ChannelListView> {
                     );
                   },
                 ),
-                if ([
-                  'admin',
-                  'owner',
-                ].contains(channel.state.members
-                    .firstWhere((m) => m.userId == channel.client.state.user.id,
-                        orElse: () => null)
-                    ?.role))
+                // if ([
+                //   'admin',
+                //   'owner',
+                // ].contains(channel.state.members
+                //     .firstWhere((m) => m.userId == channel.client.state.user.id,
+                //         orElse: () => null)
+                //     ?.role))
                   IconSlideAction(
                     color: backgroundColor,
                     iconWidget: StreamSvgIcon.delete(
