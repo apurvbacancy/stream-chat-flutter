@@ -247,9 +247,9 @@ class _ChannelListViewState extends State<ChannelListView> {
                     StreamSvgIcon.message_new(
                       size: 90,
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 22),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
+                      padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
                       child: Text(
                         'You can message your Mutual Crushes, so start Crushing!',
                         textAlign: TextAlign.center,
