@@ -51,6 +51,17 @@ flutter:
     - lib/svgs/
     - animations/
 
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/roboto_regular_fonts.ttf
+          weight: 400
+        - asset: assets/fonts/roboto_medium_fonts.ttf
+          weight: 500
+        - asset: assets/fonts/roboto_bold_fonts.ttf
+          weight: 600
+        - asset: assets/fonts/roboto_black_fonts.ttf
+          weight: 700
 dev_dependencies:
   flutter_test:
     sdk: flutter

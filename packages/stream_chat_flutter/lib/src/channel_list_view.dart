@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:stream_chat_flutter/src/stream_svg_icon.dart';
 import 'package:stream_chat_flutter/src/utils.dart';
+import 'package:stream_chat_flutter/utils/color_assets.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../stream_chat_flutter.dart';
@@ -242,44 +243,29 @@ class _ChannelListViewState extends State<ChannelListView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: StreamSvgIcon.message(
-                        size: 136,
-                        color: StreamChatTheme.of(context)
-                            .colorTheme
-                            .greyGainsboro,
-                      ),
+                    StreamSvgIcon.message(
+                      size: 90,
+                      color: StreamChatTheme.of(context)
+                          .colorTheme
+                          .greyGainsboro,
                     ),
+                    SizedBox(height: 8),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(52, 0, 52, 0),
                       child: Text(
                         'You can message your Mutual Crushes, so start Crushing!',
-                        //'Let’s start chatting!',
-                        style: StreamChatTheme.of(context).textTheme.headline,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: ColorAssets.colorPink,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     vertical: 8.0,
-                    //     horizontal: 52,
-                    //   ),
-                    //   child: Text(
-                    //     'How about sending your first message to a friend?',
-                    //     textAlign: TextAlign.center,
-                    //     style: StreamChatTheme.of(context)
-                    //         .textTheme
-                    //         .body
-                    //         .copyWith(
-                    //           color:
-                    //               StreamChatTheme.of(context).colorTheme.grey,
-                    //         ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
-              if (widget.onStartChatPressed != null)
+              /*if (widget.onStartChatPressed != null)
                 Positioned(
                   right: 0,
                   left: 0,
@@ -300,7 +286,7 @@ class _ChannelListViewState extends State<ChannelListView> {
                       ),
                     ),
                   ),
-                ),
+                ),*/
             ],
           ),
         );
