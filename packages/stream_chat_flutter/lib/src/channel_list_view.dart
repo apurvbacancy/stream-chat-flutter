@@ -477,32 +477,32 @@ class _ChannelListViewState extends State<ChannelListView> {
               actionExtentRatio: 0.12,
               closeOnScroll: true,
               secondaryActions: <Widget>[
-                IconSlideAction(
-                  color: backgroundColor,
-                  icon: Icons.more_horiz,
-                  onTap: () {
-                    showModalBottomSheet(
-                      clipBehavior: Clip.hardEdge,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32),
-                          topRight: Radius.circular(32),
-                        ),
-                      ),
-                      context: context,
-                      builder: (context) {
-                        return StreamChannel(
-                          channel: channel,
-                          child: ChannelBottomSheet(
-                            onViewInfoTap: () {
-                              widget.onViewInfoTap(channel);
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+                // IconSlideAction(
+                //   color: backgroundColor,
+                //   icon: Icons.more_horiz,
+                //   onTap: () {
+                //     showModalBottomSheet(
+                //       clipBehavior: Clip.hardEdge,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.only(
+                //           topLeft: Radius.circular(32),
+                //           topRight: Radius.circular(32),
+                //         ),
+                //       ),
+                //       context: context,
+                //       builder: (context) {
+                //         return StreamChannel(
+                //           channel: channel,
+                //           child: ChannelBottomSheet(
+                //             onViewInfoTap: () {
+                //               widget.onViewInfoTap(channel);
+                //             },
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // ),
                 // if ([
                 //   'admin',
                 //   'owner',
@@ -529,7 +529,7 @@ class _ChannelListViewState extends State<ChannelListView> {
                         ),
                       );
                       if (res == true) {
-                        await channel.delete();
+                        await channel.hide(clearHistory: true);
                       }
                     },
                   ),
