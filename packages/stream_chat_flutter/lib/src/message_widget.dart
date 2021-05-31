@@ -1079,7 +1079,7 @@ class _MessageWidgetState extends State<MessageWidget>
                           ))
                         : widget.messageTheme.copyWith(messageText: widget.messageTheme.messageText.copyWith(
                         fontFamily: 'Poppins',
-                        fontSize: ScreenUtil().setSp(16.0),
+                        fontSize: ScreenUtil().setSp(17.0),
                     )),
                   ),
           ),
