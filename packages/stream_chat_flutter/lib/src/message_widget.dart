@@ -703,13 +703,17 @@ class _MessageWidgetState extends State<MessageWidget>
           widget.message.user.name,
           maxLines: 1,
           key: usernameKey,
-          style: widget.messageTheme.messageAuthor,
+          style: widget.messageTheme.messageAuthor.copyWith(
+            fontSize: ScreenUtil().setSp(15.0)
+          ),
           overflow: TextOverflow.ellipsis,
         ),
       if (showTimeStamp)
         Text(
           Jiffy(widget.message.createdAt.toLocal()).jm,
-          style: widget.messageTheme.createdAt,
+          style: widget.messageTheme.createdAt.copyWith(
+              fontSize: ScreenUtil().setSp(15.0)
+          ),
         ),
       if (showSendingIndicator) _buildSendingIndicator(),
     ]);
