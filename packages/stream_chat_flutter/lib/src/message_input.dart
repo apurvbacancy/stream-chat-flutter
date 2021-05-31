@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -549,7 +550,9 @@ class MessageInputState extends State<MessageInput> {
                       keyboardType: widget.keyboardType,
                       controller: textEditingController,
                       focusNode: _focusNode,
-                      style: theme.messageInputTheme.inputTextStyle,
+                      style: theme.messageInputTheme.inputTextStyle.copyWith(
+                        fontSize: ScreenUtil().setSp(17.0)
+                      ),
                       autofocus: widget.autofocus,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: _getInputDecoration(),
@@ -572,6 +575,7 @@ class MessageInputState extends State<MessageInput> {
       isDense: true,
       hintText: _getHint(),
       hintStyle: theme.messageInputTheme.inputTextStyle.copyWith(
+        fontSize: ScreenUtil().setSp(17.0),
         color: theme.colorTheme.grey,
       ),
       border: OutlineInputBorder(
