@@ -1076,7 +1076,9 @@ class _MessageWidgetState extends State<MessageWidget>
                                 widget.messageTheme.messageText.copyWith(
                             fontSize: 42,
                           ))
-                        : widget.messageTheme,
+                        : widget.messageTheme.copyWith(messageText: widget.messageTheme.messageText.copyWith(
+                      fontSize: 18
+                    )),
                   ),
           ),
           if (hasUrlAttachments && !hasQuotedMessage) _buildUrlAttachment(),

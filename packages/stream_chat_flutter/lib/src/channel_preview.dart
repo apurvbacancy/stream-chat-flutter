@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter/src/stream_svg_icon.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../stream_chat_flutter.dart';
 import 'channel_name.dart';
 import 'channel_unread_indicator.dart';
@@ -94,7 +94,11 @@ class ChannelPreview extends StatelessWidget {
                   Flexible(
                     child: title ??
                         ChannelName(
-                          textStyle: channelPreviewTheme.title,
+                          textStyle: channelPreviewTheme.title.copyWith(
+                              fontFamily: 'Poppins',
+                              fontSize: ScreenUtil().setSp(17.0),
+                              fontWeight: FontWeight.w800
+                          ),
                         ),
                   ),
                   StreamBuilder<List<Member>>(
