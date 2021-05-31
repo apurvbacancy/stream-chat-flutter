@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter/src/message_action.dart';
 import 'package:stream_chat_flutter/src/message_actions_modal.dart';
@@ -1077,7 +1078,8 @@ class _MessageWidgetState extends State<MessageWidget>
                             fontSize: 42,
                           ))
                         : widget.messageTheme.copyWith(messageText: widget.messageTheme.messageText.copyWith(
-                      fontSize: 18
+                        fontFamily: 'Poppins',
+                        fontSize: ScreenUtil().setSp(15.0),
                     )),
                   ),
           ),
