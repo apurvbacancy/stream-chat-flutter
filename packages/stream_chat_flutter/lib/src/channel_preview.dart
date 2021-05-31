@@ -96,8 +96,8 @@ class ChannelPreview extends StatelessWidget {
                         ChannelName(
                           textStyle: channelPreviewTheme.title.copyWith(
                               fontFamily: 'Poppins',
-                              fontSize: ScreenUtil().setSp(16.0),
-                              fontWeight: FontWeight.w600
+                              fontSize: ScreenUtil().setSp(17.0),
+                              fontWeight: FontWeight.w700
                           ),
                         ),
                   ),
