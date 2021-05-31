@@ -43,6 +43,7 @@ dependencies:
   dio: ^3.0.10
   path_provider: ^1.6.27
   video_thumbnail: ^0.2.5+1
+  flutter_screenutil: 1.0.2
 
 flutter:
   assets:

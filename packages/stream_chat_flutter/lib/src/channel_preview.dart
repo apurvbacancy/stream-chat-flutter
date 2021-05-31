@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter/src/stream_svg_icon.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../stream_chat_flutter.dart';
 import 'channel_name.dart';
 import 'channel_unread_indicator.dart';
@@ -97,7 +97,7 @@ class ChannelPreview extends StatelessWidget {
                           textStyle: channelPreviewTheme.title.copyWith(
                               fontFamily: 'Poppins',
                               fontSize: ScreenUtil().setSp(17.0),
-                              fontWeight: FontWeight.w800
+                              fontWeight: FontWeight.w700
                           ),
                         ),
                   ),
@@ -257,6 +257,8 @@ class ChannelPreview extends StatelessWidget {
                     .channelPreviewTheme
                     .subtitle
                     .color,
+                fontFamily: 'Poppins',
+                fontSize: ScreenUtil().setSp(16.0),
                 fontStyle: (lastMessage.isSystem || lastMessage.isDeleted)
                     ? FontStyle.italic
                     : FontStyle.normal),
@@ -265,6 +267,8 @@ class ChannelPreview extends StatelessWidget {
                     .channelPreviewTheme
                     .subtitle
                     .color,
+                fontFamily: 'Poppins',
+                fontSize: ScreenUtil().setSp(16.0),
                 fontStyle: (lastMessage.isSystem || lastMessage.isDeleted)
                     ? FontStyle.italic
                     : FontStyle.normal,
