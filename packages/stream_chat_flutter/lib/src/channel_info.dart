@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -74,7 +75,10 @@ class ChannelInfo extends StatelessWidget {
         } else {
           alternativeWidget = Text(
             'Last seen ${Jiffy(otherMember.user.lastActive).fromNow()}',
-            style: textStyle,
+            style: textStyle.copyWith(
+                fontSize: ScreenUtil().setSp(14.0),
+              fontFamily: 'Poppins'
+            ),
           );
         }
       }

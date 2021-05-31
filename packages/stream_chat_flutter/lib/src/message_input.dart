@@ -551,7 +551,8 @@ class MessageInputState extends State<MessageInput> {
                       controller: textEditingController,
                       focusNode: _focusNode,
                       style: theme.messageInputTheme.inputTextStyle.copyWith(
-                        fontSize: ScreenUtil().setSp(17.0)
+                        fontSize: ScreenUtil().setSp(17.0),
+                        fontFamily: 'Poppins',
                       ),
                       autofocus: widget.autofocus,
                       textAlignVertical: TextAlignVertical.center,
@@ -576,6 +577,7 @@ class MessageInputState extends State<MessageInput> {
       hintText: _getHint(),
       hintStyle: theme.messageInputTheme.inputTextStyle.copyWith(
         fontSize: ScreenUtil().setSp(17.0),
+        fontFamily: 'Poppins',
         color: theme.colorTheme.grey,
       ),
       border: OutlineInputBorder(

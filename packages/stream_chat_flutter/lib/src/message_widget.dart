@@ -704,7 +704,8 @@ class _MessageWidgetState extends State<MessageWidget>
           maxLines: 1,
           key: usernameKey,
           style: widget.messageTheme.messageAuthor.copyWith(
-            fontSize: ScreenUtil().setSp(15.0)
+            fontSize: ScreenUtil().setSp(15.0),
+            fontFamily: 'Poppins',
           ),
           overflow: TextOverflow.ellipsis,
         ),
@@ -712,7 +713,8 @@ class _MessageWidgetState extends State<MessageWidget>
         Text(
           Jiffy(widget.message.createdAt.toLocal()).jm,
           style: widget.messageTheme.createdAt.copyWith(
-              fontSize: ScreenUtil().setSp(15.0)
+              fontSize: ScreenUtil().setSp(15.0),
+            fontFamily: 'Poppins',
           ),
         ),
       if (showSendingIndicator) _buildSendingIndicator(),
