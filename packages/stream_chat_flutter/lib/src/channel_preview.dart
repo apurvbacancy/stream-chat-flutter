@@ -96,8 +96,8 @@ class ChannelPreview extends StatelessWidget {
                         ChannelName(
                           textStyle: channelPreviewTheme.title.copyWith(
                               fontFamily: 'Poppins',
-                              fontSize: ScreenUtil().setSp(17.0),
-                              fontWeight: FontWeight.w700
+                              fontSize: ScreenUtil().setSp(16.0),
+                              fontWeight: FontWeight.w600
                           ),
                         ),
                   ),
@@ -258,7 +258,7 @@ class ChannelPreview extends StatelessWidget {
                     .subtitle
                     .color,
                 fontFamily: 'Poppins',
-                fontSize: ScreenUtil().setSp(16.0),
+                fontSize: ScreenUtil().setSp(15.0),
                 fontStyle: (lastMessage.isSystem || lastMessage.isDeleted)
                     ? FontStyle.italic
                     : FontStyle.normal),
@@ -268,7 +268,7 @@ class ChannelPreview extends StatelessWidget {
                     .subtitle
                     .color,
                 fontFamily: 'Poppins',
-                fontSize: ScreenUtil().setSp(16.0),
+                fontSize: ScreenUtil().setSp(15.0),
                 fontStyle: (lastMessage.isSystem || lastMessage.isDeleted)
                     ? FontStyle.italic
                     : FontStyle.normal,
