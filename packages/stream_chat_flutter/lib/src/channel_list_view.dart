@@ -232,7 +232,7 @@ class _ChannelListViewState extends State<ChannelListView> {
 
   Widget _buildEmptyWidget(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 4, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 5, 0, 0),
       child: Column(
         children: [
           StreamSvgIcon.message_new(
@@ -255,66 +255,66 @@ class _ChannelListViewState extends State<ChannelListView> {
         ],
       ),
     );
-    return LayoutBuilder(
-      builder: (context, viewportConstraints) {
-        return SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Stack(
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StreamSvgIcon.message_new(
-                      size: 90,
-                    ),
-                    SizedBox(height: 22),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
-                      child: Text(
-                        'You can message your Mutual Crushes, so start Crushing!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: ColorAssets.colorPink,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            height: 1.5),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              /*if (widget.onStartChatPressed != null)
-                Positioned(
-                  right: 0,
-                  left: 0,
-                  bottom: 32,
-                  child: Center(
-                    child: TextButton(
-                      onPressed: widget.onStartChatPressed,
-                      child: Text(
-                        'Start a chat',
-                        style: StreamChatTheme.of(context)
-                            .textTheme
-                            .bodyBold
-                            .copyWith(
-                              color: StreamChatTheme.of(context)
-                                  .colorTheme
-                                  .accentBlue,
-                            ),
-                      ),
-                    ),
-                  ),
-                ),*/
-            ],
-          ),
-        );
-      },
-    );
+    // return LayoutBuilder(
+    //   builder: (context, viewportConstraints) {
+    //     return SingleChildScrollView(
+    //       physics: AlwaysScrollableScrollPhysics(),
+    //       child: Stack(
+    //         children: [
+    //           ConstrainedBox(
+    //             constraints: BoxConstraints(
+    //               minHeight: viewportConstraints.maxHeight,
+    //             ),
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 StreamSvgIcon.message_new(
+    //                   size: 90,
+    //                 ),
+    //                 SizedBox(height: 22),
+    //                 Padding(
+    //                   padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
+    //                   child: Text(
+    //                     'You can message your Mutual Crushes, so start Crushing!',
+    //                     textAlign: TextAlign.center,
+    //                     style: TextStyle(
+    //                         fontFamily: 'Poppins',
+    //                         color: ColorAssets.colorPink,
+    //                         fontSize: 15,
+    //                         fontWeight: FontWeight.w600,
+    //                         height: 1.5),
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //           /*if (widget.onStartChatPressed != null)
+    //             Positioned(
+    //               right: 0,
+    //               left: 0,
+    //               bottom: 32,
+    //               child: Center(
+    //                 child: TextButton(
+    //                   onPressed: widget.onStartChatPressed,
+    //                   child: Text(
+    //                     'Start a chat',
+    //                     style: StreamChatTheme.of(context)
+    //                         .textTheme
+    //                         .bodyBold
+    //                         .copyWith(
+    //                           color: StreamChatTheme.of(context)
+    //                               .colorTheme
+    //                               .accentBlue,
+    //                         ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ),*/
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   Widget _buildLoadingWidget(BuildContext context) {
