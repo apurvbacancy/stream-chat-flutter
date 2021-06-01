@@ -97,8 +97,9 @@ class _ImageFooterState extends State<ImageFooter> {
                       width: 48,
                     )
                   : IconButton(
+                      iconSize: 40,
                       icon: StreamSvgIcon.iconShare(
-                        size: 24.0,
+                        size: 40.0,
                         color: StreamChatTheme.of(context).colorTheme.black,
                       ),
                       onPressed: () async {
@@ -146,7 +147,9 @@ class _ImageFooterState extends State<ImageFooter> {
                 ),
               ),
               IconButton(
+                iconSize: 40,
                 icon: StreamSvgIcon.iconGrid(
+                  size: 40,
                   color: StreamChatTheme.of(context).colorTheme.black,
                 ),
                 onPressed: () => _showPhotosModal(context),

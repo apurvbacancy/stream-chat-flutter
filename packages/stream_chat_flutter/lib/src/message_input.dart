@@ -461,6 +461,7 @@ class MessageInputState extends State<MessageInput> {
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
         firstChild: IconButton(
+          iconSize: 40,
           onPressed: () => setState(() => _actionsShrunk = false),
           icon: Transform.rotate(
             alignment: Alignment.center,
@@ -469,6 +470,7 @@ class MessageInputState extends State<MessageInput> {
                 ? pi
                 : 0,
             child: StreamSvgIcon.emptyCircleLeft(
+              size: 40,
               color: StreamChatTheme.of(context)
                   .messageInputTheme
                   .expandButtonColor,
@@ -476,10 +478,10 @@ class MessageInputState extends State<MessageInput> {
           ),
           padding: const EdgeInsets.all(0),
           constraints: BoxConstraints.tightFor(
-            height: 24,
-            width: 24,
+            height: 40,
+            width: 40,
           ),
-          splashRadius: 24,
+          splashRadius: 40,
         ),
         secondChild: FittedBox(
           child: Row(
@@ -998,8 +1000,9 @@ class MessageInputState extends State<MessageInput> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                  iconSize: 24,
+                  iconSize: 40,
                   icon: StreamSvgIcon.pictures(
+                    size: 40,
                     color: _getIconColor(0),
                   ),
                   onPressed: _attachmentContainsFile && _attachments.isNotEmpty
@@ -1011,8 +1014,9 @@ class MessageInputState extends State<MessageInput> {
                         },
                 ),
                 IconButton(
-                  iconSize: 32,
+                  iconSize: 40,
                   icon: StreamSvgIcon.files(
+                    size: 40,
                     color: _getIconColor(1),
                   ),
                   onPressed: !_attachmentContainsFile && _attachments.isNotEmpty
@@ -1022,8 +1026,9 @@ class MessageInputState extends State<MessageInput> {
                         },
                 ),
                 IconButton(
-                  iconSize: 24,
+                  iconSize: 40,
                   icon: StreamSvgIcon.camera(
+                    size: 40,
                     color: _getIconColor(2),
                   ),
                   onPressed: _attachmentContainsFile && _attachments.isNotEmpty
@@ -1034,8 +1039,9 @@ class MessageInputState extends State<MessageInput> {
                 ),
                 IconButton(
                   padding: const EdgeInsets.all(0),
-                  iconSize: 24,
+                  iconSize: 40,
                   icon: StreamSvgIcon.record(
+                    size: 40,
                     color: _getIconColor(3),
                   ),
                   onPressed: _attachmentContainsFile && _attachments.isNotEmpty
@@ -1693,7 +1699,9 @@ class MessageInputState extends State<MessageInput> {
     final s = textEditingController.text.trim();
 
     return IconButton(
+      iconSize: 40,
       icon: StreamSvgIcon.lightning(
+        size: 40,
         color: s.isNotEmpty
             ? StreamChatTheme.of(context).colorTheme.greyGainsboro
             : (_commandsOverlay != null
@@ -1706,10 +1714,10 @@ class MessageInputState extends State<MessageInput> {
       ),
       padding: const EdgeInsets.all(0),
       constraints: BoxConstraints.tightFor(
-        height: 24,
-        width: 24,
+        height: 40,
+        width: 40,
       ),
-      splashRadius: 24,
+      splashRadius: 40,
       onPressed: () async {
         if (_openFilePickerSection) {
           setState(() {
@@ -1739,9 +1747,9 @@ class MessageInputState extends State<MessageInput> {
 
   Widget _buildAttachmentButton() {
     return IconButton(
-      iconSize: 35,
+      iconSize: 40,
       icon: StreamSvgIcon.camera(
-        size: 35,
+        size: 40,
         color: _openFilePickerSection
             ? StreamChatTheme.of(context).messageInputTheme.actionButtonColor
             : StreamChatTheme.of(context)
@@ -1750,10 +1758,10 @@ class MessageInputState extends State<MessageInput> {
       ),
       padding: const EdgeInsets.all(0),
       constraints: BoxConstraints.tightFor(
-        height: 35,
-        width: 35,
+        height: 40,
+        width: 40,
       ),
-      splashRadius: 35,
+      splashRadius: 40,
       onPressed: () async {
         _emojiOverlay?.remove();
         _emojiOverlay = null;
@@ -1989,14 +1997,17 @@ class MessageInputState extends State<MessageInput> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: IconButton(
+        iconSize: 40,
         onPressed: sendMessage,
         padding: const EdgeInsets.all(0),
-        splashRadius: 24,
+        splashRadius: 40,
         constraints: BoxConstraints.tightFor(
-          height: 24,
-          width: 24,
+          height: 40,
+          width: 40,
         ),
         icon: StreamSvgIcon(
+          width: 40,
+          height: 40,
           assetName: _getSendIcon(),
           color: StreamChatTheme.of(context).messageInputTheme.sendButtonColor,
         ),
