@@ -1740,6 +1740,7 @@ class MessageInputState extends State<MessageInput> {
   Widget _buildAttachmentButton() {
     return IconButton(
       icon: StreamSvgIcon.camera(
+        size: 30,
         color: _openFilePickerSection
             ? StreamChatTheme.of(context).messageInputTheme.actionButtonColor
             : StreamChatTheme.of(context)
