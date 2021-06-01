@@ -554,6 +554,7 @@ class MessageInputState extends State<MessageInput> {
                       focusNode: _focusNode,
                       style: theme.messageInputTheme.inputTextStyle.copyWith(
                         fontSize: ScreenUtil().setSp(17.0),
+                        fontWeight: FontWeight.normal,
                         fontFamily: 'Poppins',
                       ),
                       autofocus: widget.autofocus,
@@ -580,6 +581,7 @@ class MessageInputState extends State<MessageInput> {
       hintStyle: theme.messageInputTheme.inputTextStyle.copyWith(
         fontSize: ScreenUtil().setSp(17.0),
         fontFamily: 'Poppins',
+        fontWeight: FontWeight.normal,
         color: theme.colorTheme.grey,
       ),
       border: OutlineInputBorder(
