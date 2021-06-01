@@ -251,7 +251,7 @@ class _ChannelListViewState extends State<ChannelListView> {
           ),
         ),
       ],
-    )
+    );
     return LayoutBuilder(
       builder: (context, viewportConstraints) {
         return SingleChildScrollView(
