@@ -461,7 +461,7 @@ class MessageInputState extends State<MessageInput> {
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
         firstChild: IconButton(
-          iconSize: 40,
+          iconSize: 35,
           onPressed: () => setState(() => _actionsShrunk = false),
           icon: Transform.rotate(
             alignment: Alignment.center,
@@ -470,7 +470,7 @@ class MessageInputState extends State<MessageInput> {
                 ? pi
                 : 0,
             child: StreamSvgIcon.emptyCircleLeft(
-              size: 40,
+              size: 35,
               color: StreamChatTheme.of(context)
                   .messageInputTheme
                   .expandButtonColor,
@@ -478,10 +478,10 @@ class MessageInputState extends State<MessageInput> {
           ),
           padding: const EdgeInsets.all(0),
           constraints: BoxConstraints.tightFor(
-            height: 40,
-            width: 40,
+            height: 35,
+            width: 35,
           ),
-          splashRadius: 40,
+          splashRadius: 35,
         ),
         secondChild: FittedBox(
           child: Row(
@@ -1699,9 +1699,9 @@ class MessageInputState extends State<MessageInput> {
     final s = textEditingController.text.trim();
 
     return IconButton(
-      iconSize: 40,
+      iconSize: 35,
       icon: StreamSvgIcon.lightning(
-        size: 40,
+        size: 35,
         color: s.isNotEmpty
             ? StreamChatTheme.of(context).colorTheme.greyGainsboro
             : (_commandsOverlay != null
@@ -1714,10 +1714,10 @@ class MessageInputState extends State<MessageInput> {
       ),
       padding: const EdgeInsets.all(0),
       constraints: BoxConstraints.tightFor(
-        height: 40,
-        width: 40,
+        height: 35,
+        width: 35,
       ),
-      splashRadius: 40,
+      splashRadius: 35,
       onPressed: () async {
         if (_openFilePickerSection) {
           setState(() {
@@ -1986,6 +1986,8 @@ class MessageInputState extends State<MessageInput> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: StreamSvgIcon(
+        width: 40,
+        height: 40,
         assetName: _getIdleSendIcon(),
         color:
             StreamChatTheme.of(context).messageInputTheme.sendButtonIdleColor,
