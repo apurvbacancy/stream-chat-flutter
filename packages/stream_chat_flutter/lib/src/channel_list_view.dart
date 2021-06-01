@@ -231,6 +231,27 @@ class _ChannelListViewState extends State<ChannelListView> {
   }
 
   Widget _buildEmptyWidget(BuildContext context) {
+    return Column(
+      children: [
+        StreamSvgIcon.message_new(
+          size: 90,
+        ),
+        SizedBox(height: 22),
+        Padding(
+          padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
+          child: Text(
+            'You can message your Mutual Crushes, so start Crushing!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                color: ColorAssets.colorPink,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                height: 1.5),
+          ),
+        ),
+      ],
+    )
     return LayoutBuilder(
       builder: (context, viewportConstraints) {
         return SingleChildScrollView(
