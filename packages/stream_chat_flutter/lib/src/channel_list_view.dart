@@ -232,7 +232,7 @@ class _ChannelListViewState extends State<ChannelListView> {
 
   Widget _buildEmptyWidget(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 5, 0, 0),
+      margin: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height / 4.5, 0, 0),
       child: Column(
         children: [
           StreamSvgIcon.message_new(
