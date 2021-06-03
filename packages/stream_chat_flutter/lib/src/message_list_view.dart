@@ -3,7 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:stream_chat_flutter/src/info_tile.dart';
@@ -298,7 +300,12 @@ class _MessageListViewState extends State<MessageListView> {
       loadingBuilder: widget.loadingBuilder ??
           (context) {
             return Center(
-              child: const CircularProgressIndicator(),
+              //child: const CircularProgressIndicator(),
+              child: Lottie.asset(
+                'assets/lottie/loading_animaiton.json',
+                height: ScreenUtil().setWidth(150.0),
+                width: ScreenUtil().setWidth(150.0),
+              ),
             );
           },
       emptyBuilder: widget.emptyBuilder ??
