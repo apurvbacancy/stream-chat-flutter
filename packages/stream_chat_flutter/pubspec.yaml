@@ -52,7 +52,6 @@ flutter:
     - svgs/
     - lib/svgs/
     - animations/
-    - assets/lottie/
 
   fonts:
     - family: Poppins
