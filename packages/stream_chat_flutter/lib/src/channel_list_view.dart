@@ -638,13 +638,15 @@ class _ChannelListViewState extends State<ChannelListView> {
               ),
             );
           }
+          //Todo show loader in middle
           return snapshot.data
-              ? Center(
+              ? Container()
+          /*Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: const CircularProgressIndicator(),
                   ),
-                )
+                )*/
               : Offstage();
         });
   }
