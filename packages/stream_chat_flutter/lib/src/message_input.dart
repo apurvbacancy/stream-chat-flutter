@@ -443,24 +443,35 @@ class MessageInputState extends State<MessageInput> {
     );
   }
 
+  // Widget _animateSendButton(BuildContext context) {
+  //   final sendButton = widget.activeSendButton != null
+  //       ? InkWell(
+  //           onTap: sendMessage,
+  //           child: widget.activeSendButton,
+  //         )
+  //       : _buildSendButton(context);
+  //   return AnimatedCrossFade(
+  //     crossFadeState: (_messageIsPresent || _attachments.isNotEmpty)
+  //         ? CrossFadeState.showFirst
+  //         : CrossFadeState.showSecond,
+  //     firstChild: sendButton,
+  //     secondChild: widget.idleSendButton ?? _buildIdleSendButton(context),
+  //     duration:
+  //         StreamChatTheme.of(context).messageInputTheme.sendAnimationDuration,
+  //     alignment: Alignment.center,
+  //   );
+  // }
   Widget _animateSendButton(BuildContext context) {
     final sendButton = widget.activeSendButton != null
         ? InkWell(
-            onTap: sendMessage,
-            child: widget.activeSendButton,
-          )
-        : _buildSendButton(context);
-    return AnimatedCrossFade(
-      crossFadeState: (_messageIsPresent || _attachments.isNotEmpty)
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
-      firstChild: sendButton,
-      secondChild: widget.idleSendButton ?? _buildIdleSendButton(context),
-      duration:
-          StreamChatTheme.of(context).messageInputTheme.sendAnimationDuration,
-      alignment: Alignment.center,
+      onTap: sendMessage,
+      child: widget.activeSendButton,
+    ) : _buildSendButton(context);
+    return Container(
+      child: (_messageIsPresent || _attachments.isNotEmpty)?sendButton:widget.idleSendButton ?? _buildIdleSendButton(context),
     );
   }
+
 
   // Widget _buildExpandActionsButton() {
   //   return Padding(
