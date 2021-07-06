@@ -165,7 +165,7 @@ Future<bool> showInfoDialog(
                   okText,
                   style: TextStyle(
                     color: theme?.colorTheme?.black?.withOpacity(0.5) ??
-                        StreamChatTheme.of(context).colorTheme.accentBlue,
+                        StreamChatTheme.of(context).colorTheme.razz,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

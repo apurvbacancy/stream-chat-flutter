@@ -110,7 +110,7 @@ class ChannelImage extends StatelessWidget {
                     onTap: onTap != null ? (_) => onTap() : null,
                     selected: selected,
                     selectionColor: selectionColor ??
-                        StreamChatTheme.of(context).colorTheme.accentBlue,
+                        StreamChatTheme.of(context).colorTheme.razz,
                     selectionThickness: selectionThickness,
                   );
                 });
@@ -137,7 +137,7 @@ class ChannelImage extends StatelessWidget {
               onTap: onTap,
               selected: selected,
               selectionColor: selectionColor ??
-                  StreamChatTheme.of(context).colorTheme.accentBlue,
+                  StreamChatTheme.of(context).colorTheme.razz,
               selectionThickness: selectionThickness,
             );
           }
@@ -155,7 +155,7 @@ class ChannelImage extends StatelessWidget {
                       .avatarTheme
                       .constraints,
               decoration: BoxDecoration(
-                color: StreamChatTheme.of(context).colorTheme.accentBlue,
+                color: StreamChatTheme.of(context).colorTheme.razz,
               ),
               child: Stack(
                 alignment: Alignment.center,
@@ -208,7 +208,7 @@ class ChannelImage extends StatelessWidget {
                         .avatarTheme
                         .constraints,
                 color: selectionColor ??
-                    StreamChatTheme.of(context).colorTheme.accentBlue,
+                    StreamChatTheme.of(context).colorTheme.razz,
                 child: Padding(
                   padding: EdgeInsets.all(selectionThickness),
                   child: child,

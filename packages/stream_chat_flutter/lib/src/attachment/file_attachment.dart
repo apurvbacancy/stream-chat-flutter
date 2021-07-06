@@ -209,7 +209,7 @@ class FileAttachment extends AttachmentWidget {
           success: () => Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundColor: theme.colorTheme.accentBlue,
+              backgroundColor: theme.colorTheme.razz,
               maxRadius: 12.0,
               child: StreamSvgIcon.check(color: theme.colorTheme.white),
             ),
@@ -273,7 +273,7 @@ class FileAttachment extends AttachmentWidget {
               showBackground: false,
               padding: EdgeInsets.zero,
               textStyle: textStyle,
-              progressIndicatorColor: theme.colorTheme.accentBlue,
+              progressIndicatorColor: theme.colorTheme.razz,
             );
           },
           inProgress: (sent, total) {
@@ -283,7 +283,7 @@ class FileAttachment extends AttachmentWidget {
               showBackground: false,
               padding: EdgeInsets.zero,
               textStyle: textStyle,
-              progressIndicatorColor: theme.colorTheme.accentBlue,
+              progressIndicatorColor: theme.colorTheme.razz,
             );
           },
           success: () => Text('${fileSize(size, 2)}', style: textStyle),

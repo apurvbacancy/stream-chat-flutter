@@ -1030,7 +1030,7 @@ class _MessageWidgetState extends State<MessageWidget>
             Text(
               widget.readList.length.toString(),
               style: style.copyWith(
-                color: StreamChatTheme.of(context).colorTheme.accentBlue,
+                color: StreamChatTheme.of(context).colorTheme.razz,
               ),
             ),
           SizedBox(width: 2),

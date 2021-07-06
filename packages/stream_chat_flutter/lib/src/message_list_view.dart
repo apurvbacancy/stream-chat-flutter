@@ -1036,7 +1036,7 @@ class _MessageListViewState extends State<MessageListView> {
             widget.onMessageSwiped(message);
           },
           backgroundIcon: StreamSvgIcon.reply(
-            color: StreamChatTheme.of(context).colorTheme.accentBlue,
+            color: StreamChatTheme.of(context).colorTheme.razz,
           ),
           child: child,
         ),

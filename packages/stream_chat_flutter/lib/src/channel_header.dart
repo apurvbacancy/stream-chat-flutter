@@ -169,32 +169,76 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
               child: Container(
                 height: preferredSize.height,
                 width: preferredSize.width,
-                child: Column(
+                child:
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     title ??
+                //         ChannelName(
+                //           textStyle: StreamChatTheme.of(context)
+                //               .channelTheme
+                //               .channelHeaderTheme
+                //               .title.copyWith(
+                //               fontSize: ScreenUtil().setSp(16.0),
+                //             fontFamily: 'Poppins'
+                //           ),
+                //         ),
+                //     SizedBox(height: 2),
+                //     subtitle ??
+                //         ChannelInfo(
+                //           showTypingIndicator: showTypingIndicator,
+                //           channel: channel,
+                //           textStyle: StreamChatTheme.of(context)
+                //               .channelTheme
+                //               .channelHeaderTheme
+                //               .subtitle,
+                //         ),
+                //   ],
+                // ),
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    Center(
+                      child: ChannelImage(
+                        borderRadius: StreamChatTheme.of(context)
+                            .channelTheme
+                            .channelHeaderTheme
+                            .avatarTheme
+                            .borderRadius,
+                        constraints: StreamChatTheme.of(context)
+                            .channelTheme
+                            .channelHeaderTheme
+                            .avatarTheme
+                            .constraints,
+                        onTap: onImageTap,
+                      ),
+                    ),
+                    SizedBox(width: 6),
                     title ??
                         ChannelName(
+                          calledFromChannelHeader: true,
                           textStyle: StreamChatTheme.of(context)
                               .channelTheme
                               .channelHeaderTheme
                               .title.copyWith(
                               fontSize: ScreenUtil().setSp(16.0),
-                            fontFamily: 'Poppins'
+                              fontFamily: 'Poppins'
                           ),
                         ),
-                    SizedBox(height: 2),
-                    subtitle ??
-                        ChannelInfo(
-                          showTypingIndicator: showTypingIndicator,
-                          channel: channel,
-                          textStyle: StreamChatTheme.of(context)
-                              .channelTheme
-                              .channelHeaderTheme
-                              .subtitle,
-                        ),
+                    // subtitle ??
+                    //     ChannelInfo(
+                    //       showTypingIndicator: showTypingIndicator,
+                    //       channel: channel,
+                    //       textStyle: StreamChatTheme.of(context)
+                    //           .channelTheme
+                    //           .channelHeaderTheme
+                    //           .subtitle,
+                    //     ),
                   ],
-                ),
+                )
+
               ),
             ),
           ),

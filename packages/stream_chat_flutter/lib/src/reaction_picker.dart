@@ -126,7 +126,7 @@ class _ReactionPickerState extends State<ReactionPicker>
                                       color: ownReactionIndex != -1
                                           ? StreamChatTheme.of(context)
                                               .colorTheme
-                                              .accentBlue
+                                              .razz
                                           : Theme.of(context)
                                               .iconTheme
                                               .color

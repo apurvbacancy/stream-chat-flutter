@@ -264,7 +264,7 @@ class AttachmentActionsModal extends StatelessWidget {
                                     value: progress.toProgressIndicatorValue,
                                     strokeWidth: 8.0,
                                     valueColor: AlwaysStoppedAnimation(
-                                      theme.colorTheme.accentBlue,
+                                      theme.colorTheme.razz,
                                     ),
                                   ),
                                   Center(

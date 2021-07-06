@@ -154,7 +154,7 @@ class ChannelListHeader extends StatelessWidget implements PreferredSizeWidget {
                             case ConnectionStatus.connected:
                               color = StreamChatTheme.of(context)
                                   .colorTheme
-                                  .accentBlue;
+                                  .razz;
                               break;
                             case ConnectionStatus.connecting:
                               color = Colors.grey;
@@ -261,7 +261,7 @@ class ChannelListHeader extends StatelessWidget implements PreferredSizeWidget {
                 .copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: StreamChatTheme.of(context).colorTheme.accentBlue,
+                  color: StreamChatTheme.of(context).colorTheme.razz,
                 ),
           ),
         ),

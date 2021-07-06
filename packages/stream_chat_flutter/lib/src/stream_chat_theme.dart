@@ -227,10 +227,12 @@ class StreamChatThemeData {
       ),
       ownMessageTheme: MessageTheme(
         messageAuthor: textTheme.footnote.copyWith(color: colorTheme.grey),
-        messageText: textTheme.body,
+        // messageText: textTheme.body,
+        messageText: textTheme.body.copyWith(color: Colors.white),
         createdAt: textTheme.footnote.copyWith(color: colorTheme.grey),
         replies: textTheme.footnoteBold.copyWith(color: accentColor),
-        messageBackgroundColor: colorTheme.greyGainsboro,
+        // messageBackgroundColor: colorTheme.greyGainsboro,
+        messageBackgroundColor: colorTheme.razz,
         reactionsBackgroundColor: colorTheme.white,
         reactionsBorderColor: colorTheme.greyWhisper,
         reactionsMaskColor: colorTheme.whiteSnow,
@@ -270,10 +272,10 @@ class StreamChatThemeData {
       messageInputTheme: MessageInputTheme(
         borderRadius: BorderRadius.circular(20),
         sendAnimationDuration: Duration(milliseconds: 300),
-        actionButtonColor: colorTheme.accentBlue,
+        actionButtonColor: colorTheme.razz,
         actionButtonIdleColor: colorTheme.grey,
-        expandButtonColor: colorTheme.accentBlue,
-        sendButtonColor: colorTheme.accentBlue,
+        expandButtonColor: colorTheme.razz,
+        sendButtonColor: colorTheme.razz,
         sendButtonIdleColor: colorTheme.greyGainsboro,
         inputBackground: colorTheme.white,
         inputTextStyle: textTheme.body,
@@ -501,6 +503,7 @@ class ColorTheme {
   final Color highlight;
   final Color overlay;
   final Color overlayDark;
+  final Color razz;
   final Gradient bgGradient;
 
   ColorTheme.light({
@@ -518,6 +521,7 @@ class ColorTheme {
     this.highlight = const Color(0xfffbf4dd),
     this.overlay = const Color.fromRGBO(0, 0, 0, 0.2),
     this.overlayDark = const Color.fromRGBO(0, 0, 0, 0.6),
+    this.razz = const Color(0xFFE31469),
     this.bgGradient = const LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -550,6 +554,7 @@ class ColorTheme {
     this.accentBlue = const Color(0xff005FFF),
     this.accentRed = const Color(0xffFF3742),
     this.accentGreen = const Color(0xff20E070),
+    this.razz = const Color(0xFFE31469),
     this.borderTop = const Effect(
         sigmaX: 0, sigmaY: -1, color: Color(0xff141924), blur: 0.0),
     this.borderBottom = const Effect(
@@ -593,6 +598,7 @@ class ColorTheme {
     Color overlay,
     Color overlayDark,
     Gradient bgGradient,
+    Color razz
   }) {
     return type == ColorThemeType.light
         ? ColorTheme.light(
@@ -615,6 +621,7 @@ class ColorTheme {
             overlay: overlay ?? this.overlay,
             overlayDark: overlayDark ?? this.overlayDark,
             bgGradient: bgGradient ?? this.bgGradient,
+            razz: razz ?? this.razz,
           )
         : ColorTheme.dark(
             black: black ?? this.black,
@@ -636,6 +643,7 @@ class ColorTheme {
             overlay: overlay ?? this.overlay,
             overlayDark: overlayDark ?? this.overlayDark,
             bgGradient: bgGradient ?? this.bgGradient,
+            razz: razz ?? this.razz,
           );
   }
 
@@ -661,6 +669,7 @@ class ColorTheme {
       borderBottom: other.borderBottom,
       shadowIconButton: other.shadowIconButton,
       modalShadow: other.modalShadow,
+      razz: other.razz
     );
   }
 }

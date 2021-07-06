@@ -201,7 +201,7 @@ class GiphyAttachment extends AttachmentWidget {
                           style: TextStyle(
                               color: StreamChatTheme.of(context)
                                   .colorTheme
-                                  .accentBlue,
+                                  .razz,
                               fontWeight: FontWeight.bold),
                         ),
                       ),

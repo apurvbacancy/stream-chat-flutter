@@ -89,7 +89,7 @@ class MentionTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 18.0, left: 8.0),
                 child: StreamSvgIcon.mentions(
-                  color: StreamChatTheme.of(context).colorTheme.accentBlue,
+                  color: StreamChatTheme.of(context).colorTheme.razz,
                 ),
               ),
         ],

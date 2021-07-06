@@ -74,7 +74,7 @@ class UserItem extends StatelessWidget {
       ),
       trailing: selected
           ? StreamSvgIcon.checkSend(
-              color: StreamChatTheme.of(context).colorTheme.accentBlue,
+              color: StreamChatTheme.of(context).colorTheme.razz,
             )
           : null,
       title: Text(
