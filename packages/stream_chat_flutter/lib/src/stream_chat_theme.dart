@@ -182,7 +182,7 @@ class StreamChatThemeData {
         ),
       ),
       channelPreviewTheme: ChannelPreviewTheme(
-          unreadCounterColor: colorTheme.accentRed,
+          unreadCounterColor: colorTheme.razz,
           avatarTheme: AvatarTheme(
             borderRadius: BorderRadius.circular(20),
             constraints: BoxConstraints.tightFor(
