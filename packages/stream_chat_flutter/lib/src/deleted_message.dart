@@ -63,7 +63,7 @@ class DeletedMessage extends StatelessWidget {
               'Message deleted',
               style: messageTheme.messageText.copyWith(
                 fontStyle: FontStyle.italic,
-                color: messageTheme.createdAt.color,
+                color: Colors.white,
               ),
             ),
           ),
