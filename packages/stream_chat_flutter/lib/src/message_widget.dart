@@ -158,6 +158,9 @@ class MessageWidget extends StatefulWidget {
   // Customize onTap on attachment
   final void Function(Message message, Attachment attachment) onAttachmentTap;
 
+  /// Send icon button
+  final Widget sendIconButton;
+
   ///
   MessageWidget({
     Key key,
@@ -209,6 +212,7 @@ class MessageWidget extends StatefulWidget {
     this.onQuotedMessageTap,
     this.customActions = const [],
     this.onAttachmentTap,
+    this.sendIconButton
   })  : attachmentBuilders = {
           'image': (context, message, attachments) {
             var border = RoundedRectangleBorder(
@@ -848,6 +852,7 @@ class _MessageWidgetState extends State<MessageWidget>
           return StreamChannel(
             channel: channel,
             child: MessageActionsModal(
+              sendMessageIcon: widget.sendIconButton,
               attachmentBorderRadiusGeometry:
                   widget.attachmentBorderRadiusGeometry,
               showUserAvatar:

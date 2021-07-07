@@ -142,6 +142,7 @@ class MessageListView extends StatefulWidget {
     this.onSystemMessageTap,
     this.onAttachmentTap,
     this.textBuilder,
+    this.sendIconButton
   }) : super(key: key);
 
   /// Function used to build a custom message widget
@@ -236,6 +237,10 @@ class MessageListView extends StatefulWidget {
 
   /// Customize the MessageWidget textBuilder
   final void Function(BuildContext context, Message message) textBuilder;
+
+  /// Send Icon botton
+  final Widget sendIconButton;
+
 
   @override
   _MessageListViewState createState() => _MessageListViewState();
@@ -796,6 +801,7 @@ class _MessageListViewState extends State<MessageListView> {
     final isOnlyEmoji = message.text.isOnlyEmoji;
 
     return MessageWidget(
+      sendIconButton: widget.sendIconButton,
       showThreadReplyIndicator: false,
       showInChannelIndicator: false,
       showReplyMessage: false,
@@ -933,6 +939,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     Widget child = MessageWidget(
       key: ValueKey<String>('MESSAGE-${message.id}'),
+      sendIconButton: widget.sendIconButton,
       message: message,
       reverse: isMyMessage,
       showReactions: !message.isDeleted,

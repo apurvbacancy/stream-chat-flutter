@@ -35,6 +35,7 @@ class MessageActionsModal extends StatefulWidget {
   final ShapeBorder attachmentShape;
   final DisplayWidget showUserAvatar;
   final BorderRadius attachmentBorderRadiusGeometry;
+  final Widget sendMessageIcon;
 
   /// List of custom actions
   final List<MessageAction> customActions;
@@ -60,6 +61,7 @@ class MessageActionsModal extends StatefulWidget {
     this.reverse = false,
     this.customActions = const [],
     this.attachmentBorderRadiusGeometry,
+    this.sendMessageIcon
   }) : super(key: key);
 
   @override
@@ -562,7 +564,7 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
                       child: StreamSvgIcon.edit(
                         color: StreamChatTheme.of(context)
                             .colorTheme
-                            .greyGainsboro,
+                            .razz,
                       ),
                     ),
                     Text(
@@ -580,6 +582,7 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
               widget.editMessageInputBuilder != null
                   ? widget.editMessageInputBuilder(context, widget.message)
                   : MessageInput(
+                      sendMessageIcon:widget.sendMessageIcon ,
                       editMessage: widget.message,
                       preMessageSending: (m) {
                         FocusScope.of(context).unfocus();
