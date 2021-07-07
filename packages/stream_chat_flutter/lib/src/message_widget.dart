@@ -161,6 +161,9 @@ class MessageWidget extends StatefulWidget {
   /// Send icon button
   final Widget sendIconButton;
 
+  /// Send icon button idle
+  final Widget sendIconButtonIdle;
+
   ///
   MessageWidget({
     Key key,
@@ -212,7 +215,8 @@ class MessageWidget extends StatefulWidget {
     this.onQuotedMessageTap,
     this.customActions = const [],
     this.onAttachmentTap,
-    this.sendIconButton
+    this.sendIconButton,
+    this.sendIconButtonIdle
   })  : attachmentBuilders = {
           'image': (context, message, attachments) {
             var border = RoundedRectangleBorder(
@@ -853,6 +857,7 @@ class _MessageWidgetState extends State<MessageWidget>
             channel: channel,
             child: MessageActionsModal(
               sendMessageIcon: widget.sendIconButton,
+              sendMessageIconIdle: widget.sendIconButtonIdle,
               attachmentBorderRadiusGeometry:
                   widget.attachmentBorderRadiusGeometry,
               showUserAvatar:

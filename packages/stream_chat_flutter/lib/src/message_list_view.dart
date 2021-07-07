@@ -142,7 +142,8 @@ class MessageListView extends StatefulWidget {
     this.onSystemMessageTap,
     this.onAttachmentTap,
     this.textBuilder,
-    this.sendIconButton
+    this.sendIconButton,
+    this.sendIconButtonIdle,
   }) : super(key: key);
 
   /// Function used to build a custom message widget
@@ -241,6 +242,9 @@ class MessageListView extends StatefulWidget {
   /// Send Icon botton
   final Widget sendIconButton;
 
+  /// Send Icon botton Idle
+  final Widget sendIconButtonIdle;
+
 
   @override
   _MessageListViewState createState() => _MessageListViewState();
@@ -253,7 +257,6 @@ class _MessageListViewState extends State<MessageListView> {
   ItemPositionsListener _itemPositionListener;
   int _messageListLength;
   StreamChannelState streamChannel;
-
   int get _initialIndex {
     if (widget.initialScrollIndex != null) return widget.initialScrollIndex;
     if (streamChannel.initialMessageId != null) {
@@ -802,6 +805,7 @@ class _MessageListViewState extends State<MessageListView> {
 
     return MessageWidget(
       sendIconButton: widget.sendIconButton,
+      sendIconButtonIdle: widget.sendIconButtonIdle,
       showThreadReplyIndicator: false,
       showInChannelIndicator: false,
       showReplyMessage: false,
@@ -940,6 +944,7 @@ class _MessageListViewState extends State<MessageListView> {
     Widget child = MessageWidget(
       key: ValueKey<String>('MESSAGE-${message.id}'),
       sendIconButton: widget.sendIconButton,
+      sendIconButtonIdle: widget.sendIconButtonIdle,
       message: message,
       reverse: isMyMessage,
       showReactions: !message.isDeleted,

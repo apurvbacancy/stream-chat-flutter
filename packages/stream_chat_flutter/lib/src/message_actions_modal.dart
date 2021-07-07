@@ -36,6 +36,7 @@ class MessageActionsModal extends StatefulWidget {
   final DisplayWidget showUserAvatar;
   final BorderRadius attachmentBorderRadiusGeometry;
   final Widget sendMessageIcon;
+  final Widget sendMessageIconIdle;
 
   /// List of custom actions
   final List<MessageAction> customActions;
@@ -61,7 +62,8 @@ class MessageActionsModal extends StatefulWidget {
     this.reverse = false,
     this.customActions = const [],
     this.attachmentBorderRadiusGeometry,
-    this.sendMessageIcon
+    this.sendMessageIcon,
+    this.sendMessageIconIdle
   }) : super(key: key);
 
   @override
@@ -583,6 +585,7 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
                   ? widget.editMessageInputBuilder(context, widget.message)
                   : MessageInput(
                       sendMessageIcon:widget.sendMessageIcon ,
+                      sendMessageIconIdle: widget.sendMessageIconIdle,
                       editMessage: widget.message,
                       preMessageSending: (m) {
                         FocusScope.of(context).unfocus();
