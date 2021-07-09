@@ -179,6 +179,7 @@ class _ChannelListViewState extends State<ChannelListView> {
 
     if (widget.pullToRefresh) {
       child = RefreshIndicator(
+        color:StreamChatTheme.of(context).colorTheme.razz,
         onRefresh: () => _channelListController.loadData(),
         child: child,
       );
