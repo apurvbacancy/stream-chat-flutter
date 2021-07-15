@@ -306,7 +306,7 @@ class _MessageListViewState extends State<MessageListView> {
       loadingBuilder: widget.loadingBuilder ??
           (context) {
             return Center(
-              child: const CircularProgressIndicator(color:Color(0xFFE31469)),
+              child: const CircularProgressIndicator(backgroundColor:Color(0xFFE31469)),
             );
           },
       emptyBuilder: widget.emptyBuilder ??
@@ -718,7 +718,7 @@ class _MessageListViewState extends State<MessageListView> {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: const CircularProgressIndicator(color:Color(0xFFE31469)),
+            child: const CircularProgressIndicator(backgroundColor:Color(0xFFE31469)),
           ),
         );
       },
