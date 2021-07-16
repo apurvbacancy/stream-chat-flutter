@@ -99,7 +99,7 @@ class GiphyAttachment extends AttachmentWidget {
                         width: size?.width,
                         height: size?.height,
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: Color(0xFFE31469)),
                         ),
                       );
                     },
