@@ -218,7 +218,6 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                     SizedBox(width: 6),
                     title ??
                         ChannelName(
-                          calledFromChannelHeader: true,
                           textStyle: StreamChatTheme.of(context)
                               .channelTheme
                               .channelHeaderTheme
