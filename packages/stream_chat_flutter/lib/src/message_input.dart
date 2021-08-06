@@ -2004,6 +2004,7 @@ class MessageInputState extends State<MessageInput> {
         pickedFile = await _imagePicker.getVideo(source: ImageSource.camera);
       }
       if (pickedFile == null) {
+        setState(() => _inputEnabled = true);
         return;
       }
       final bytes = await pickedFile.readAsBytes();
