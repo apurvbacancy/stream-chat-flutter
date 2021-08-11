@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -477,7 +478,7 @@ class _ChannelListViewState extends State<ChannelListView> {
         onTap = (client, _) {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) {
                 return StreamChannel(
                   channel: client,
