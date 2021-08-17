@@ -194,7 +194,8 @@ class _ChannelListViewState extends State<ChannelListView> {
 
   Widget _buildListView(BuildContext context, List<Channel> channels) {
     Widget child;
-
+    channels = channels.map((channel) => channel?.state?.channelState?.messages!=null && channel?.state?.channelState?.messages?.length!=0?channel:null).toList();
+    channels.removeWhere((element) => element==null);
     if (channels.isNotEmpty) {
       if (widget.crossAxisCount > 1) {
         child = GridView.builder(
