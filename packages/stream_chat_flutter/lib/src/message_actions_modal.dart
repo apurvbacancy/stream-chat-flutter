@@ -541,59 +541,64 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
       clipBehavior: Clip.hardEdge,
       isScrollControlled: true,
       backgroundColor:
-          StreamChatTheme.of(context).messageInputTheme.inputBackground,
+      StreamChatTheme.of(context).messageInputTheme.inputBackground,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
       ),
-      builder: (context) {
-        return StreamChannel(
-          channel: channel,
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: StreamSvgIcon.edit(
-                        color: StreamChatTheme.of(context)
-                            .colorTheme
-                            .razz,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: StreamChannel(
+            channel: channel,
+            child: Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: StreamSvgIcon.edit(
+                          color: StreamChatTheme.of(context)
+                              .colorTheme
+                              .razz,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Edit Message',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      icon: StreamSvgIcon.closeSmall(),
-                      onPressed: Navigator.of(context).pop,
-                    ),
-                  ],
+                      Text(
+                        'Edit Message',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        icon: StreamSvgIcon.closeSmall(),
+                        onPressed: Navigator.of(context).pop,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              widget.editMessageInputBuilder != null
-                  ? widget.editMessageInputBuilder(context, widget.message)
-                  : MessageInput(
-                      sendMessageIcon:widget.sendMessageIcon ,
-                      sendMessageIconIdle: widget.sendMessageIconIdle,
-                      editMessage: widget.message,
-                      preMessageSending: (m) {
-                        FocusScope.of(context).unfocus();
-                        Navigator.pop(context);
-                        return m;
-                      },
-                    ),
-            ],
+                widget.editMessageInputBuilder != null
+                    ? widget.editMessageInputBuilder(context, widget.message)
+                    : Padding(
+                  padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
+                  child: MessageInput(
+                    sendMessageIcon:widget.sendMessageIcon ,
+                    sendMessageIconIdle: widget.sendMessageIconIdle,
+                    editMessage: widget.message,
+                    preMessageSending: (m) {
+                      FocusScope.of(context).unfocus();
+                      Navigator.pop(context);
+                      return m;
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
