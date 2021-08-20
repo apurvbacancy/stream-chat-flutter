@@ -245,6 +245,8 @@ class MessageListView extends StatefulWidget {
   /// Send Icon botton Idle
   final Widget sendIconButtonIdle;
 
+  /// isPush flag
+  static bool isPush = false;
 
   @override
   _MessageListViewState createState() => _MessageListViewState();
@@ -790,7 +792,9 @@ class _MessageListViewState extends State<MessageListView> {
           }
         }
         if (mounted) {
-          setState(() => _showScrollToBottom = !isVisible);
+          if(!MessageListView.isPush) {
+            setState(() => _showScrollToBottom = !isVisible);
+          }
         }
       },
       child: messageWidget,
