@@ -37,6 +37,8 @@ class MessageActionsModal extends StatefulWidget {
   final BorderRadius attachmentBorderRadiusGeometry;
   final Widget sendMessageIcon;
   final Widget sendMessageIconIdle;
+  final BorderRadius borderRadiusGeometry;
+
 
   /// List of custom actions
   final List<MessageAction> customActions;
@@ -63,7 +65,8 @@ class MessageActionsModal extends StatefulWidget {
     this.customActions = const [],
     this.attachmentBorderRadiusGeometry,
     this.sendMessageIcon,
-    this.sendMessageIconIdle
+    this.sendMessageIconIdle,
+    this.borderRadiusGeometry
   }) : super(key: key);
 
   @override
@@ -193,6 +196,8 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
                                 showSendingIndicator: false,
                                 shape: widget.messageShape,
                                 attachmentShape: widget.attachmentShape,
+                                borderRadiusGeometry: widget.borderRadiusGeometry,
+                                borderSide: BorderSide.none,
                               ),
                             ),
                             SizedBox(height: 8),
