@@ -793,6 +793,9 @@ class _MessageListViewState extends State<MessageListView> {
         }
         if (mounted) {
           if(!MessageListView.isPush) {
+            if(isVisible){
+              streamChannel.channel.markRead();
+            }
             setState(() => _showScrollToBottom = !isVisible);
           }
         }
