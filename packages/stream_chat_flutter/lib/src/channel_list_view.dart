@@ -227,10 +227,15 @@ class _ChannelListViewState extends State<ChannelListView> {
       }
     }
 
-    return AnimatedSwitcher(
+    // return AnimatedSwitcher(
+    //   duration: const Duration(milliseconds: 500),
+    //   child: child,
+    // );
+
+    return channels.isNotEmpty?AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: child,
-    );
+    ):_buildEmptyWidget(context);
   }
 
   Widget _buildEmptyWidget(BuildContext context) {
