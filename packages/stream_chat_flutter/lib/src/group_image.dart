@@ -5,7 +5,7 @@ import '../stream_chat_flutter.dart';
 
 class GroupImage extends StatelessWidget {
   const GroupImage({
-    Key key,
+    Key? key,
     @required this.images,
     this.constraints,
     this.onTap,
@@ -15,12 +15,12 @@ class GroupImage extends StatelessWidget {
     this.selectionThickness = 4,
   }) : super(key: key);
 
-  final List<String> images;
-  final BoxConstraints constraints;
-  final VoidCallback onTap;
+  final List<String>? images;
+  final BoxConstraints? constraints;
+  final VoidCallback? onTap;
   final bool selected;
-  final BorderRadius borderRadius;
-  final Color selectionColor;
+  final BorderRadius? borderRadius;
+  final Color? selectionColor;
   final double selectionThickness;
 
   @override
@@ -34,13 +34,13 @@ class GroupImage extends StatelessWidget {
         borderRadius: borderRadius ??
             StreamChatTheme.of(context)
                 .ownMessageTheme
-                .avatarTheme
+                .avatarTheme!
                 .borderRadius,
         child: Container(
           constraints: constraints ??
               StreamChatTheme.of(context)
                   .ownMessageTheme
-                  .avatarTheme
+                  .avatarTheme!
                   .constraints,
           decoration: BoxDecoration(
             color: StreamChatTheme.of(context).colorTheme.razz,
@@ -54,7 +54,7 @@ class GroupImage extends StatelessWidget {
                 child: Flex(
                   direction: Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: images
+                  children: images!
                       .take(2)
                       .map((url) => Flexible(
                             fit: FlexFit.tight,
@@ -73,13 +73,13 @@ class GroupImage extends StatelessWidget {
                       .toList(),
                 ),
               ),
-              if (images.length > 2)
+              if (images!.length > 2)
                 Flexible(
                   fit: FlexFit.tight,
                   child: Flex(
                     direction: Axis.horizontal,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: images
+                    children: images!
                         .skip(2)
                         .map((url) => Flexible(
                               fit: FlexFit.tight,
@@ -107,13 +107,13 @@ class GroupImage extends StatelessWidget {
     if (selected) {
       avatar = ClipRRect(
         borderRadius: (borderRadius ??
-                streamChatTheme.ownMessageTheme.avatarTheme.borderRadius) +
+                streamChatTheme.ownMessageTheme.avatarTheme!.borderRadius) +
             BorderRadius.circular(selectionThickness),
         child: Container(
           color: selectionColor ??
               StreamChatTheme.of(context).colorTheme.razz,
-          height: 64.0,
-          width: 64.0,
+          height: 64,
+          width: 64,
           child: Padding(
             padding: EdgeInsets.all(selectionThickness),
             child: avatar,

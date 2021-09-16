@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter/src/stream_chat_theme.dart';
+import 'package:stream_chat_flutter/src/extension.dart';
 
 /// It shows a date divider depending on the date difference
 class DateDivider extends StatelessWidget {
-  final DateTime dateTime;
-  final bool uppercase;
-
+  /// Constructor for creating a [DateDivider]
   const DateDivider({
-    Key key,
-    @required this.dateTime,
+    Key? key,
+    required this.dateTime,
     this.uppercase = false,
   }) : super(key: key);
+
+  /// [DateTime] to display
+  final DateTime dateTime;
+
+  /// If text is uppercase
+  final bool uppercase;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +25,12 @@ class DateDivider extends StatelessWidget {
 
     String dayInfo;
     if (Jiffy(createdAt).isSame(now, Units.DAY)) {
-      dayInfo = 'Today';
+      dayInfo = context.translations.todayLabel;
     } else if (Jiffy(createdAt)
-        .isSame(now.subtract(Duration(days: 1)), Units.DAY)) {
-      dayInfo = 'Yesterday';
+        .isSame(now.subtract(const Duration(days: 1)), Units.DAY)) {
+      dayInfo = context.translations.yesterdayLabel;
     } else if (Jiffy(createdAt).isAfter(
-      now.subtract(Duration(days: 7)),
+      now.subtract(const Duration(days: 7)),
       Units.DAY,
     )) {
       dayInfo = createdAt.EEEE;
@@ -41,19 +45,20 @@ class DateDivider extends StatelessWidget {
 
     if (uppercase) dayInfo = dayInfo.toUpperCase();
 
+    final chatThemeData = StreamChatTheme.of(context);
     return Center(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
         decoration: BoxDecoration(
-          color: StreamChatTheme.of(context).colorTheme.overlayDark,
+          color: chatThemeData.colorTheme.overlayDark,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           dayInfo,
-          style: StreamChatTheme.of(context).textTheme.footnote.copyWith(
-                color: StreamChatTheme.of(context).colorTheme.white,
-            fontSize: ScreenUtil().setSp(14.0),
-              ),
+          style: chatThemeData.textTheme.footnote.copyWith(
+            color: chatThemeData.colorTheme.white,
+            fontSize: 14.0,
+          ),
         ),
       ),
     );

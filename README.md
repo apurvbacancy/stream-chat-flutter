@@ -17,7 +17,7 @@ This repository contains code for our [Dart](https://dart.dev/) and [Flutter](ht
 Stream allows developers to rapidly deploy scalable feeds and chat messaging with an industry leading 99.999% uptime SLA guarantee.
 
 ## Sample apps and demos 
-Our team maintains a dedicated repository for fully-fledged sample applications and demos. Consider checking out [GetStream/flutter-samples](https://github.com/GetStream/flutter-samples) to learn more or get started by looking at our latest [Stream Chat demo](https://github.com/GetStream/flutter-samples/tree/main/stream_chat_v1). 
+Our team maintains a dedicated repository for fully-fledged sample applications and demos. Consider checking out [GetStream/flutter-samples](https://github.com/GetStream/flutter-samples) to learn more or get started by looking at our latest [Stream Chat demo](https://github.com/GetStream/flutter-samples/tree/main/packages/stream_chat_v1). 
 
 ## Free for Makers
 
@@ -47,6 +47,9 @@ This package provides business logic to fetch common things required for integra
 
 ### [stream_chat_flutter](https://github.com/GetStream/stream-chat-flutter/tree/master/packages/stream_chat_flutter)
 This library includes both a low-level chat SDK and a set of reusable and customizable UI components.
+
+### [stream_chat_localizations](https://github.com/GetStream/stream-chat-flutter/tree/master/packages/stream_chat_localizations)
+This library includes a set of localization files for the Flutter UI components.
 
 ## Flutter Chat Tutorial
 

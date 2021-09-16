@@ -46,7 +46,7 @@ import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 class ChannelImage extends StatelessWidget {
   /// Instantiate a new ChannelImage
   const ChannelImage({
-    Key key,
+    Key? key,
     this.channel,
     this.constraints,
     this.onTap,
@@ -57,24 +57,24 @@ class ChannelImage extends StatelessWidget {
     this.selectionThickness = 4,
   }) : super(key: key);
 
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
 
   /// The channel to show the image of
-  final Channel channel;
+  final Channel? channel;
 
   /// The diameter of the image
-  final BoxConstraints constraints;
+  final BoxConstraints? constraints;
 
   /// The function called when the image is tapped
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  final bool showOnlineStatus;
+  final bool? showOnlineStatus;
 
-  final bool selected;
+  final bool? selected;
 
-  final Color selectionColor;
+  final Color? selectionColor;
 
-  final double selectionThickness;
+  final double? selectionThickness;
 
   @override
   Widget build(BuildContext context) {
@@ -86,59 +86,57 @@ class ChannelImage extends StatelessWidget {
         builder: (context, snapshot) {
           String image;
           if (snapshot.data?.containsKey('image') == true) {
-            image = snapshot.data['image'];
-          } else if (channel.state.members?.length == 2) {
-            final otherMember = channel.state.members
-                .firstWhere((member) => member.user.id != streamChat.user.id);
+            image = snapshot.data!['image'];
+          } else if (channel.state!.members?.length == 2) {
+            final otherMember = channel.state!.members
+                .firstWhere((member) => member.user!.id != streamChat.currentUser!.id);
             return StreamBuilder<User>(
                 stream: streamChat.client.state.usersStream
-                    .map((users) => users[otherMember.userId]),
+                    .map((users) => users[otherMember.userId]!),
                 initialData: otherMember.user,
-                builder: (context, snapshot) {
-                  return UserAvatar(
+                builder: (context, snapshot) => UserAvatar(
                     borderRadius: borderRadius ??
                         StreamChatTheme.of(context)
                             .channelPreviewTheme
-                            .avatarTheme
+                            .avatarTheme!
                             .borderRadius,
-                    user: snapshot.data ?? otherMember.user,
+                    user: snapshot.data ?? otherMember.user!,
                     constraints: constraints ??
                         StreamChatTheme.of(context)
                             .channelPreviewTheme
-                            .avatarTheme
+                            .avatarTheme!
                             .constraints,
-                    onTap: onTap != null ? (_) => onTap() : null,
-                    selected: selected,
+                    onTap: onTap != null ? (_) => onTap!() : null,
+                    selected: selected!,
                     selectionColor: selectionColor ??
-                        StreamChatTheme.of(context).colorTheme.razz,
-                    selectionThickness: selectionThickness,
-                  );
-                });
+                        StreamChatTheme.of(context).colorTheme.accentPrimary,
+                    selectionThickness: selectionThickness!,
+                  ));
           } else {
-            final images = channel.state.members
+            final images = channel.state!.members
                 .where((member) =>
-                    member.user.id != streamChat.user.id &&
-                    member.user.extraData['image'] != null)
+                    member.user!.id != streamChat.user!.id &&
+                    member.user!.extraData['image'] != null)
                 .take(4)
-                .map((e) => e.user.extraData['image'] as String)
+                .map((e) => e.user!.extraData['image'] as String)
                 .toList();
             return GroupImage(
               images: images,
               borderRadius: borderRadius ??
                   StreamChatTheme.of(context)
                       .channelPreviewTheme
-                      .avatarTheme
+                      .avatarTheme!
                       .borderRadius,
               constraints: constraints ??
                   StreamChatTheme.of(context)
                       .channelPreviewTheme
-                      .avatarTheme
+                      .avatarTheme!
                       .constraints,
-              onTap: onTap,
-              selected: selected,
+              onTap: onTap!,
+              selected: selected!,
               selectionColor: selectionColor ??
-                  StreamChatTheme.of(context).colorTheme.razz,
-              selectionThickness: selectionThickness,
+                  StreamChatTheme.of(context).colorTheme.accentPrimary,
+              selectionThickness: selectionThickness!,
             );
           }
 
@@ -146,29 +144,27 @@ class ChannelImage extends StatelessWidget {
             borderRadius: borderRadius ??
                 StreamChatTheme.of(context)
                     .channelPreviewTheme
-                    .avatarTheme
+                    .avatarTheme!
                     .borderRadius,
             child: Container(
               constraints: constraints ??
                   StreamChatTheme.of(context)
                       .channelPreviewTheme
-                      .avatarTheme
+                      .avatarTheme!
                       .constraints,
               decoration: BoxDecoration(
-                color: StreamChatTheme.of(context).colorTheme.razz,
+                color: StreamChatTheme.of(context).colorTheme.accentPrimary,
               ),
               child: Stack(
                 alignment: Alignment.center,
                 fit: StackFit.expand,
                 children: <Widget>[
-                  image != null
-                      ? CachedNetworkImage(
+                  if (image != null) CachedNetworkImage(
                           imageUrl: image,
-                          errorWidget: (_, __, ___) {
-                            return Center(
+                          errorWidget: (_, __, ___) => Center(
                               child: Text(
                                 snapshot.data?.containsKey('name') ?? false
-                                    ? snapshot.data['name'][0]
+                                    ? snapshot.data!['name'][0]
                                     : '',
                                 style: TextStyle(
                                   color: StreamChatTheme.of(context)
@@ -177,12 +173,10 @@ class ChannelImage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            );
-                          },
+                            ),
                           fit: BoxFit.cover,
-                        )
-                      : StreamChatTheme.of(context)
-                          .defaultChannelImage(context, channel),
+                        ) else StreamChatTheme.of(context)
+                          .defaultUserImage(context,StreamChat.of(context).currentUser! ),
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -193,24 +187,24 @@ class ChannelImage extends StatelessWidget {
               ),
             ),
           );
-          if (selected) {
+          if (selected!) {
             child = ClipRRect(
               borderRadius: (borderRadius ??
                       StreamChatTheme.of(context)
                           .ownMessageTheme
-                          .avatarTheme
+                          .avatarTheme!
                           .borderRadius) +
-                  BorderRadius.circular(selectionThickness),
+                  BorderRadius.circular(selectionThickness!),
               child: Container(
                 constraints: constraints ??
                     StreamChatTheme.of(context)
                         .ownMessageTheme
-                        .avatarTheme
+                        .avatarTheme!
                         .constraints,
                 color: selectionColor ??
-                    StreamChatTheme.of(context).colorTheme.razz,
+                    StreamChatTheme.of(context).colorTheme.accentPrimary,
                 child: Padding(
-                  padding: EdgeInsets.all(selectionThickness),
+                  padding: EdgeInsets.all(selectionThickness!),
                   child: child,
                 ),
               ),

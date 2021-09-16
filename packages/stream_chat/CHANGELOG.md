@@ -1,3 +1,147 @@
+## 2.2.1
+
+🐞 Fixed
+
+- Fixed unread indicator not updating correctly
+- Fix `channel.show` not working because of null body
+
+## 2.2.0
+
+🐞 Fixed
+
+- Fixed `channel.markAllRead` throwing failed host lookup.
+
+✅ Added
+
+- `User` and `OwnUser` classes now have an `image` property. Setting an image will also set the 'image' key on `extraData`, so `user.image` and `user.extraData['image']` is the same.
+- `User` and `OwnUser` classes now have a `name` property. Setting a name will also set the 'name' key on `extraData`, so `user.name` and `user.extraData['name']` is the same.
+- `Channel` class now has extra `image` getter and setter. As well as an `updateImage` to do a partial update after a channel has been initialized.
+- `Channel` class now has extra `name` getter and setter. As well as an `updateName` to do a partial update after a channel has been initialized.
+- Added slow mode which allows a cooldown period after a user sends a message.
+## 2.1.1
+
+🐞 Fixed
+
+- Mutes were not working correctly in 2.1.0
+
+## 2.1.0
+
+🛑️ Removed
+
+- The `MessageTranslation` class has been removed. Use the new `i18n` field in the `Message` class instead.
+
+✅ Added
+
+- The `Message` class now has an `i18n` field for translations
+- The `User` class now has a `language` field for the user's language preference.
+
+🔄 Changed
+
+- `client.user` is now deprecated in favor of `client.currentUser`.
+- `client.userStream` is now deprecated in favor of `client.currentUserStream`.
+
+🐞 Fixed
+
+- [#563](https://github.com/GetStream/stream-chat-flutter/issues/563): `Channel.stopWatching()` not working 
+- [#575](https://github.com/GetStream/stream-chat-flutter/issues/575): Wrong `OwnUser.*`
+
+## 2.0.0
+
+🛑️ Breaking Changes from `1.5.3`
+
+- migrate this package to null safety
+- `ConnectUserWithProvider` now requires `tokenProvider` as a required param. (Removed from the constructor)
+- `client.disconnect()` is now divided into two different functions
+    - `client.closeConnection()` -> for closing user websocket connection.
+    - `client.disconnectUser()` -> for disconnecting user and resetting client state.
+- `client.devToken()` now returns a `Token` model instead of `String`.
+- `ApiError` is removed in favor of `StreamChatError`
+    - `StreamChatError` -> parent type for all the stream errors.
+    - `StreamWebSocketError` -> for user websocket related errors.
+    - `StreamChatNetworkError` -> for network related errors.
+- `client.queryChannels()`, `channel.query()` options param is removed in favor of individual params
+    - `option.state` -> bool state
+    - `option.watch` -> bool watch
+    - `option.presence` -> bool presence
+- `client.queryUsers()` options param is removed in favor of individual params
+    - `option.presence` -> bool presence
+- Migrate this package to null safety
+- Added typed filters
+
+🐞 Fixed
+
+- [#369](https://github.com/GetStream/stream-chat-flutter/issues/369): Client does not return without internet connection
+- several minor fixes
+- performance improvements
+
+
+✅ Added
+
+- New `Location` enum is introduced for easily changing the client location/baseUrl.
+- New `client.openConnection()` and `client.closeConnection()` is introduced to connect/disconnect user ws connection.
+- New `client.partialUpdateMessage` and `channel.partialUpdateMessage` methods
+- `connectWebSocket` parameter in connect user calls to use the client in "connection-less" mode.
+
+🔄 Changed
+
+- `baseURL` is now deprecated in favor of using `Location` to change data location.
+
+## 2.0.0-nullsafety.8
+
+🐞 Fixed
+- Export `PushProvider` enum
+
+## 2.0.0-nullsafety.7
+
+🛑️ Breaking Changes from `2.0.0-nullsafety.6`
+
+- `ConnectUserWithProvider` now requires `tokenProvider` as a required param. (Removed from the constructor)
+- `client.disconnect()` is now divided into two different functions
+    - `client.closeConnection()` -> for closing user websocket connection.
+    - `client.disconnectUser()` -> for disconnecting user and resetting client state.
+- `client.devToken()` now returns a `Token` model instead of `String`.
+- `ApiError` is removed in favor of `StreamChatError`
+    - `StreamChatError` -> parent type for all the stream errors.
+    - `StreamWebSocketError` -> for user websocket related errors.
+    - `StreamChatNetworkError` -> for network related errors.
+- `client.queryChannels()`, `channel.query()` options param is removed in favor of individual params
+    - `option.state` -> bool state
+    - `option.watch` -> bool watch
+    - `option.presence` -> bool presence
+- `client.queryUsers()` options param is removed in favor of individual params
+    - `option.presence` -> bool presence
+
+✅ Added
+
+- New `Location` enum is introduced for easily changing the client location/baseUrl.
+- New `client.openConnection()` and `client.closeConnection()` is introduced to connect/disconnect user ws connection.
+
+🔄 Changed
+
+- `baseURL` is now deprecated in favor of using `Location` to change data location.
+
+## 2.0.0-nullsafety.6
+
+- Fix thread reply not working with attachments
+- Minor fixes
+## 2.0.0-nullsafety.5
+
+- Minor fixes
+- Performance improvements
+- Fixed `skip_push` in `client.sendMessage`
+- Added partial message update method
+
+## 2.0.0-nullsafety.2
+
+- Added new `Filter.raw` constructor
+- Changed extraData
+- Minor fixes
+
+## 2.0.0-nullsafety.1
+
+- Migrate this package to null safety
+- Added typed filters
+
 ## 1.5.3
 
 - fix: `StreamChatClient.connect` returns quicker when you're using the persistence package
@@ -34,7 +178,8 @@
 - Save pinned messages in offline storage
 - Minor fixes
 - `StreamClient.QueryChannels` now returns a Stream and fetches the channels from storage before calling the api
-- Added `StreamClient.QueryChannelsOnline` and `StreamClient.QueryChannelsOffline` to fetch channels only from online or offline
+- Added `StreamClient.QueryChannelsOnline` and `StreamClient.QueryChannelsOffline` to fetch channels only from online or
+  offline
 
 ## 1.2.0-beta
 
@@ -45,7 +190,8 @@
 ## 1.1.0-beta
 
 - Fixed minor bugs
-- Add support for custom attachment upload [docs here](https://getstream.io/chat/docs/flutter-dart/file_uploads/?language=dart)
+- Add support for custom attachment
+  upload [docs here](https://getstream.io/chat/docs/flutter-dart/file_uploads/?language=dart)
 - Add support for asynchronous attachment upload
 
 ## 1.0.3-beta
@@ -55,7 +201,8 @@
 
 ## 1.0.2-beta
 
-- Deprecated `setUser`, `setGuestUser`, `setUserWithProvider` in favor of `connectUser`, `connectGuestUser`, `connectUserWithProvider`
+- Deprecated `setUser`, `setGuestUser`, `setUserWithProvider` in favor of `connectUser`, `connectGuestUser`
+  , `connectUserWithProvider`
 - Optimised reaction updates - i.e., Update first call Api later.
 
 ## 1.0.1-beta
@@ -65,9 +212,11 @@
 ## 1.0.0-beta
 
 - 🛑 **BREAKING** Renamed `Client` to less generic `StreamChatClient`
-- 🛑 **BREAKING** Segregated the persistence layer into separate package [stream_chat_persistence](https://pub.dev/packages/stream_chat_persistence)
+- 🛑 **BREAKING** Segregated the persistence layer into separate
+  package [stream_chat_persistence](https://pub.dev/packages/stream_chat_persistence)
 - 🛑 **BREAKING** Moved `Client.backgroundKeepAlive` to [core package](https://pub.dev/packages/stream_chat_core)
-- 🛑 **BREAKING** Moved `Client.showLocalNotification` to [core package](https://pub.dev/packages/stream_chat_core) and renamed it to `StreamChatCore.onBackgroundEventReceived`
+- 🛑 **BREAKING** Moved `Client.showLocalNotification` to [core package](https://pub.dev/packages/stream_chat_core) and
+  renamed it to `StreamChatCore.onBackgroundEventReceived`
 - Removed `flutter` dependency. This is now a pure Dart package 🥳
 - Minor improvements and bugfixes
 
@@ -122,7 +271,8 @@
 
 ## 0.2.20
 
-- Return offline data only if the backend is unreachable. This avoids the glitch of  the ChannelListView because we cannot sort by custom properties.
+- Return offline data only if the backend is unreachable. This avoids the glitch of the ChannelListView because we
+  cannot sort by custom properties.
 
 ## 0.2.19
 
@@ -136,7 +286,7 @@
 
 ## 0.2.17+1
 
-- Do not retry messages when server returns error 
+- Do not retry messages when server returns error
 
 ## 0.2.17
 

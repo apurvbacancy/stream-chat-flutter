@@ -32,7 +32,7 @@ void main() {
     );
     final entity = PinnedMessageEntity(
       id: 'testMessageId',
-      attachments: attachments?.map((it) => jsonEncode(it.toData()))?.toList(),
+      attachments: attachments.map((it) => jsonEncode(it.toData())).toList(),
       channelCid: 'testCid',
       type: 'testType',
       parentId: 'testParentId',
@@ -46,18 +46,24 @@ void main() {
       reactionCounts: reactions.fold(
         {},
         (prev, curr) =>
-            prev..update(curr.type, (value) => value + 1, ifAbsent: () => 1),
+            prev?..update(curr.type, (value) => value + 1, ifAbsent: () => 1),
       ),
+      mentionedUsers: [],
       status: MessageSendingStatus.sent,
       updatedAt: DateTime.now(),
       extraData: {'extra_test_data': 'extraData'},
       userId: user.id,
       deletedAt: DateTime.now(),
-      messageText: 'dummy text',
+      messageText: 'Hello',
       pinned: true,
       pinExpires: DateTime.now().toUtc(),
       pinnedAt: DateTime.now(),
       pinnedByUserId: user.id,
+      i18n: const {
+        'en_text': 'Hello',
+        'hi_text': 'नमस्ते',
+        'language': 'en',
+      },
     );
     final message = entity.toMessage(
       user: user,
@@ -82,15 +88,16 @@ void main() {
     expect(message.status, entity.status);
     expect(message.updatedAt, isSameDateAs(entity.updatedAt));
     expect(message.extraData, entity.extraData);
-    expect(message.user.id, entity.userId);
-    expect(message.deletedAt, isSameDateAs(entity.deletedAt));
+    expect(message.user!.id, entity.userId);
+    expect(message.deletedAt, isSameDateAs(entity.deletedAt!));
     expect(message.text, entity.messageText);
     expect(message.pinned, entity.pinned);
-    expect(message.pinExpires, isSameDateAs(entity.pinExpires));
-    expect(message.pinnedAt, isSameDateAs(entity.pinnedAt));
-    expect(message.pinnedBy.id, entity.pinnedByUserId);
+    expect(message.pinExpires, isSameDateAs(entity.pinExpires!));
+    expect(message.pinnedAt, isSameDateAs(entity.pinnedAt!));
+    expect(message.pinnedBy!.id, entity.pinnedByUserId);
     expect(message.reactionCounts, entity.reactionCounts);
     expect(message.reactionScores, entity.reactionScores);
+    expect(message.i18n, entity.i18n);
     for (var i = 0; i < message.attachments.length; i++) {
       final messageAttachment = message.attachments[i];
       final entityAttachmentData = jsonDecode(entity.attachments[i]);
@@ -138,18 +145,23 @@ void main() {
       reactionCounts: reactions.fold(
         {},
         (prev, curr) =>
-            prev..update(curr.type, (value) => value + 1, ifAbsent: () => 1),
+            prev?..update(curr.type, (value) => value + 1, ifAbsent: () => 1),
       ),
       status: MessageSendingStatus.sending,
       updatedAt: DateTime.now(),
-      extraData: {'extra_test_data': 'extraData'},
+      extraData: const {'extra_test_data': 'extraData'},
       user: user,
       deletedAt: DateTime.now(),
-      text: 'dummy text',
+      text: 'Hello',
       pinned: true,
       pinExpires: DateTime.now(),
       pinnedAt: DateTime.now(),
       pinnedBy: user,
+      i18n: const {
+        'en_text': 'Hello',
+        'hi_text': 'नमस्ते',
+        'language': 'en',
+      },
     );
     final entity = message.toPinnedEntity(cid: cid);
     expect(entity, isA<PinnedMessageEntity>());
@@ -167,18 +179,19 @@ void main() {
     expect(entity.status, message.status);
     expect(entity.updatedAt, isSameDateAs(message.updatedAt));
     expect(entity.extraData, message.extraData);
-    expect(entity.userId, message.user.id);
-    expect(entity.deletedAt, isSameDateAs(message.deletedAt));
+    expect(entity.userId, message.user!.id);
+    expect(entity.deletedAt, isSameDateAs(message.deletedAt!));
     expect(entity.messageText, message.text);
     expect(entity.pinned, message.pinned);
-    expect(entity.pinExpires, isSameDateAs(message.pinExpires));
-    expect(entity.pinnedAt, isSameDateAs(message.pinnedAt));
-    expect(entity.pinnedByUserId, message.pinnedBy.id);
+    expect(entity.pinExpires, isSameDateAs(message.pinExpires!));
+    expect(entity.pinnedAt, isSameDateAs(message.pinnedAt!));
+    expect(entity.pinnedByUserId, message.pinnedBy!.id);
     expect(entity.reactionCounts, message.reactionCounts);
     expect(entity.reactionScores, message.reactionScores);
     expect(
       entity.attachments,
-      message.attachments?.map((it) => jsonEncode(it.toData()))?.toList(),
+      message.attachments.map((it) => jsonEncode(it.toData())).toList(),
     );
+    expect(entity.i18n, message.i18n);
   });
 }

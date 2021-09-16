@@ -1,4 +1,4 @@
-# Official Core Flutter SDK for [Stream Chat](https://getstream.io/chat/)
+# Official Core [Flutter SDK](https://getstream.io/chat/sdk/flutter/) for [Stream Chat](https://getstream.io/chat/)
 
 > The official Flutter core components for Stream Chat, a service for
 > building chat applications.
@@ -12,6 +12,7 @@
 - [Register](https://getstream.io/chat/trial/) to get an API key for Stream Chat
 - [Flutter Chat Tutorial](https://getstream.io/chat/flutter/tutorial/)
 - [Chat UI Kit](https://getstream.io/chat/ui-kit/)
+- [Core Docs](https://getstream.io/chat/docs/sdk/flutter/stream_chat_flutter_core/introduction/)
 
 ### Changelog
 
@@ -25,10 +26,10 @@ It teaches you how to use this SDK and also shows how to make frequently require
 ## Example App
 
 This repo includes a fully functional example app with setup instructions.
-The example is available under the [example](https://github.com/GetStream/stream-chat-flutter-core/tree/master/example) folder.
+The example is available under the [example](https://github.com/GetStream/stream-chat-flutter/tree/main/packages/stream_chat_flutter_core/example) folder.
 
 ## Add dependency
-Add this to your package's pubspec.yaml file, use the latest version [![Pub](https://img.shields.io/pub/v/stream_chat_flutter.svg)](https://pub.dartlang.org/packages/stream_chat_flutter)
+Add this to your package's pubspec.yaml file, use the latest version [![Pub](https://img.shields.io/pub/v/stream_chat_flutter_core.svg)](https://pub.dartlang.org/packages/stream_chat_flutter_core)
 ```yaml
 dependencies:
  stream_chat_flutter_core: ^latest_version

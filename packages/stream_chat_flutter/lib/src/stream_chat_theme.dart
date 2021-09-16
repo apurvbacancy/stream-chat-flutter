@@ -1,48 +1,370 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:stream_chat_flutter/src/channel_header.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:stream_chat_flutter/src/channel_preview.dart';
+import 'package:stream_chat_flutter/src/gradient_avatar.dart';
 import 'package:stream_chat_flutter/src/message_input.dart';
 import 'package:stream_chat_flutter/src/reaction_icon.dart';
-import 'package:stream_chat_flutter/src/utils.dart';
-import 'package:stream_chat_flutter/src/extension.dart';
+import 'package:stream_chat_flutter/src/theme/themes.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 /// Inherited widget providing the [StreamChatThemeData] to the widget tree
 class StreamChatTheme extends InheritedWidget {
-  final StreamChatThemeData data;
-
-  StreamChatTheme({
-    Key key,
-    @required this.data,
-    Widget child,
+  /// Constructor for creating a [StreamChatTheme]
+  const StreamChatTheme({
+    Key? key,
+    required this.data,
+    required Widget child,
   }) : super(
           key: key,
           child: child,
         );
 
+  /// Theme data
+  final StreamChatThemeData data;
+
   @override
-  bool updateShouldNotify(StreamChatTheme old) {
-    return data != old.data;
-  }
+  bool updateShouldNotify(StreamChatTheme old) => data != old.data;
 
   /// Use this method to get the current [StreamChatThemeData] instance
   static StreamChatThemeData of(BuildContext context) {
     final streamChatTheme =
         context.dependOnInheritedWidgetOfExactType<StreamChatTheme>();
 
-    if (streamChatTheme == null) {
-      throw Exception(
-        'You must have a StreamChatTheme widget at the top of your widget tree',
-      );
-    }
+    assert(
+      streamChatTheme != null,
+      'You must have a StreamChatTheme widget at the top of your widget tree',
+    );
 
-    return streamChatTheme.data;
+    return streamChatTheme!.data;
   }
 }
 
 /// Theme data
 class StreamChatThemeData {
+  /// Create a theme from scratch
+  factory StreamChatThemeData({
+    Brightness? brightness,
+    TextTheme? textTheme,
+    ColorTheme? colorTheme,
+    ChannelListHeaderThemeData? channelListHeaderTheme,
+    ChannelPreviewThemeData? channelPreviewTheme,
+    ChannelHeaderThemeData? channelHeaderTheme,
+    MessageThemeData? otherMessageTheme,
+    MessageThemeData? ownMessageTheme,
+    MessageInputThemeData? messageInputTheme,
+    Widget Function(BuildContext, User)? defaultUserImage,
+    Widget Function(BuildContext, User)? placeholderUserImage,
+    IconThemeData? primaryIconTheme,
+    List<ReactionIcon>? reactionIcons,
+    GalleryHeaderThemeData? imageHeaderTheme,
+    GalleryFooterThemeData? imageFooterTheme,
+    MessageListViewThemeData? messageListViewTheme,
+    ChannelListViewThemeData? channelListViewTheme,
+    UserListViewThemeData? userListViewTheme,
+    MessageSearchListViewThemeData? messageSearchListViewTheme,
+  }) {
+    brightness ??= colorTheme?.brightness ?? Brightness.light;
+    final isDark = brightness == Brightness.dark;
+    textTheme ??= isDark ? TextTheme.dark() : TextTheme.light();
+    colorTheme ??= isDark ? ColorTheme.dark() : ColorTheme.light();
+
+    final defaultData = StreamChatThemeData.fromColorAndTextTheme(
+      colorTheme,
+      textTheme,
+    );
+
+    final customizedData = defaultData.copyWith(
+      channelListHeaderTheme: channelListHeaderTheme,
+      channelPreviewTheme: channelPreviewTheme,
+      channelHeaderTheme: channelHeaderTheme,
+      otherMessageTheme: otherMessageTheme,
+      ownMessageTheme: ownMessageTheme,
+      messageInputTheme: messageInputTheme,
+      defaultUserImage: defaultUserImage,
+      placeholderUserImage: placeholderUserImage,
+      primaryIconTheme: primaryIconTheme,
+      reactionIcons: reactionIcons,
+      galleryHeaderTheme: imageHeaderTheme,
+      galleryFooterTheme: imageFooterTheme,
+      messageListViewTheme: messageListViewTheme,
+      channelListViewTheme: channelListViewTheme,
+      userListViewTheme: userListViewTheme,
+      messageSearchListViewTheme: messageSearchListViewTheme,
+    );
+
+    return defaultData.merge(customizedData);
+  }
+
+  /// Theme initialised with light
+  factory StreamChatThemeData.light() =>
+      StreamChatThemeData(brightness: Brightness.light);
+
+  /// Theme initialised with dark
+  factory StreamChatThemeData.dark() =>
+      StreamChatThemeData(brightness: Brightness.dark);
+
+  /// Raw theme init
+  const StreamChatThemeData.raw({
+    required this.textTheme,
+    required this.colorTheme,
+    required this.channelListHeaderTheme,
+    required this.channelPreviewTheme,
+    required this.channelHeaderTheme,
+    required this.otherMessageTheme,
+    required this.ownMessageTheme,
+    required this.messageInputTheme,
+    required this.defaultUserImage,
+    this.placeholderUserImage,
+    required this.primaryIconTheme,
+    required this.reactionIcons,
+    required this.galleryHeaderTheme,
+    required this.galleryFooterTheme,
+    required this.messageListViewTheme,
+    required this.channelListViewTheme,
+    required this.userListViewTheme,
+    required this.messageSearchListViewTheme,
+  });
+
+  /// Create a theme from a Material [Theme]
+  factory StreamChatThemeData.fromTheme(ThemeData theme) {
+    final defaultTheme = StreamChatThemeData(brightness: theme.brightness);
+    final customizedTheme = StreamChatThemeData.fromColorAndTextTheme(
+      defaultTheme.colorTheme.copyWith(
+        accentPrimary: theme.accentColor,
+      ),
+      defaultTheme.textTheme,
+    );
+    return defaultTheme.merge(customizedTheme);
+  }
+
+  /// Create theme from color and text theme
+  factory StreamChatThemeData.fromColorAndTextTheme(
+    ColorTheme colorTheme,
+    TextTheme textTheme,
+  ) {
+    final accentColor = colorTheme.accentPrimary;
+    final iconTheme =
+        IconThemeData(color: colorTheme.textHighEmphasis.withOpacity(.5));
+    final channelHeaderTheme = ChannelHeaderThemeData(
+      avatarTheme: AvatarThemeData(
+        borderRadius: BorderRadius.circular(20),
+        constraints: const BoxConstraints.tightFor(
+          height: 40,
+          width: 40,
+        ),
+      ),
+      color: colorTheme.barsBg,
+      titleStyle: textTheme.headlineBold,
+      subtitleStyle: textTheme.footnote.copyWith(
+        color: const Color(0xff7A7A7A),
+      ),
+    );
+    final channelPreviewTheme = ChannelPreviewThemeData(
+      unreadCounterColor: colorTheme.accentError,
+      avatarTheme: AvatarThemeData(
+        borderRadius: BorderRadius.circular(20),
+        constraints: const BoxConstraints.tightFor(
+          height: 40,
+          width: 40,
+        ),
+      ),
+      titleStyle: textTheme.bodyBold,
+      subtitleStyle: textTheme.footnote.copyWith(
+        color: const Color(0xff7A7A7A),
+      ),
+      lastMessageAtStyle: textTheme.footnote.copyWith(
+        color: colorTheme.textHighEmphasis.withOpacity(.5),
+      ),
+      indicatorIconSize: 16,
+    );
+    return StreamChatThemeData.raw(
+      textTheme: textTheme,
+      colorTheme: colorTheme,
+      primaryIconTheme: iconTheme,
+      defaultUserImage: (context, user) => Center(
+        child: GradientAvatar(
+          name: user.name,
+          userId: user.id,
+        ),
+      ),
+      channelPreviewTheme: channelPreviewTheme,
+      channelListHeaderTheme: ChannelListHeaderThemeData(
+        avatarTheme: AvatarThemeData(
+          borderRadius: BorderRadius.circular(20),
+          constraints: const BoxConstraints.tightFor(
+            height: 40,
+            width: 40,
+          ),
+        ),
+        color: colorTheme.barsBg,
+        titleStyle: textTheme.headlineBold,
+      ),
+      channelHeaderTheme: channelHeaderTheme,
+      ownMessageTheme: MessageThemeData(
+        messageAuthorStyle:
+            textTheme.footnote.copyWith(color: colorTheme.textLowEmphasis),
+        messageTextStyle: textTheme.body,
+        createdAtStyle:
+            textTheme.footnote.copyWith(color: colorTheme.textLowEmphasis),
+        repliesStyle: textTheme.footnoteBold.copyWith(color: accentColor),
+        messageBackgroundColor: colorTheme.disabled,
+        reactionsBackgroundColor: colorTheme.barsBg,
+        reactionsBorderColor: colorTheme.borders,
+        reactionsMaskColor: colorTheme.appBg,
+        messageBorderColor: colorTheme.disabled,
+        avatarTheme: AvatarThemeData(
+          borderRadius: BorderRadius.circular(20),
+          constraints: const BoxConstraints.tightFor(
+            height: 32,
+            width: 32,
+          ),
+        ),
+        messageLinksStyle: TextStyle(
+          color: accentColor,
+        ),
+      ),
+      otherMessageTheme: MessageThemeData(
+        reactionsBackgroundColor: colorTheme.disabled,
+        reactionsBorderColor: colorTheme.barsBg,
+        reactionsMaskColor: colorTheme.appBg,
+        messageTextStyle: textTheme.body,
+        createdAtStyle:
+            textTheme.footnote.copyWith(color: colorTheme.textLowEmphasis),
+        messageAuthorStyle:
+            textTheme.footnote.copyWith(color: colorTheme.textLowEmphasis),
+        repliesStyle: textTheme.footnoteBold.copyWith(color: accentColor),
+        messageLinksStyle: TextStyle(
+          color: accentColor,
+        ),
+        messageBackgroundColor: colorTheme.barsBg,
+        messageBorderColor: colorTheme.borders,
+        avatarTheme: AvatarThemeData(
+          borderRadius: BorderRadius.circular(20),
+          constraints: const BoxConstraints.tightFor(
+            height: 32,
+            width: 32,
+          ),
+        ),
+      ),
+      messageInputTheme: MessageInputThemeData(
+        borderRadius: BorderRadius.circular(20),
+        sendAnimationDuration: const Duration(milliseconds: 300),
+        actionButtonColor: colorTheme.razz,
+        actionButtonIdleColor: colorTheme.textLowEmphasis,
+        expandButtonColor: colorTheme.razz,
+        sendButtonColor: colorTheme.razz,
+        sendButtonIdleColor: colorTheme.disabled,
+        inputBackground: colorTheme.white,
+        inputTextStyle: textTheme.body,
+        idleBorderGradient: LinearGradient(
+          colors: [
+            colorTheme.disabled,
+            colorTheme.disabled,
+          ],
+        ),
+        activeBorderGradient: LinearGradient(
+          colors: [
+            colorTheme.disabled,
+            colorTheme.disabled,
+          ],
+        ),
+      ),
+      reactionIcons: [
+        ReactionIcon(
+          type: 'love',
+          builder: (context, highlighted, size) {
+            final theme = StreamChatTheme.of(context);
+            return StreamSvgIcon.loveReaction(
+              color: highlighted
+                  ? theme.colorTheme.accentPrimary
+                  : theme.primaryIconTheme.color!.withOpacity(.5),
+              size: size,
+            );
+          },
+        ),
+        ReactionIcon(
+          type: 'like',
+          builder: (context, highlighted, size) {
+            final theme = StreamChatTheme.of(context);
+            return StreamSvgIcon.thumbsUpReaction(
+              color: highlighted
+                  ? theme.colorTheme.accentPrimary
+                  : theme.primaryIconTheme.color!.withOpacity(.5),
+              size: size,
+            );
+          },
+        ),
+        ReactionIcon(
+          type: 'sad',
+          builder: (context, highlighted, size) {
+            final theme = StreamChatTheme.of(context);
+            return StreamSvgIcon.thumbsDownReaction(
+              color: highlighted
+                  ? theme.colorTheme.accentPrimary
+                  : theme.primaryIconTheme.color!.withOpacity(.5),
+              size: size,
+            );
+          },
+        ),
+        ReactionIcon(
+          type: 'haha',
+          builder: (context, highlighted, size) {
+            final theme = StreamChatTheme.of(context);
+            return StreamSvgIcon.lolReaction(
+              color: highlighted
+                  ? theme.colorTheme.accentPrimary
+                  : theme.primaryIconTheme.color!.withOpacity(.5),
+              size: size,
+            );
+          },
+        ),
+        ReactionIcon(
+          type: 'wow',
+          builder: (context, highlighted, size) {
+            final theme = StreamChatTheme.of(context);
+            return StreamSvgIcon.wutReaction(
+              color: highlighted
+                  ? theme.colorTheme.accentPrimary
+                  : theme.primaryIconTheme.color!.withOpacity(.5),
+              size: size,
+            );
+          },
+        ),
+      ],
+      galleryHeaderTheme: GalleryHeaderThemeData(
+        closeButtonColor: colorTheme.textHighEmphasis,
+        backgroundColor: channelHeaderTheme.color,
+        iconMenuPointColor: colorTheme.textHighEmphasis,
+        titleTextStyle: textTheme.headlineBold,
+        subtitleTextStyle: channelPreviewTheme.subtitleStyle,
+        bottomSheetBarrierColor: colorTheme.overlay,
+      ),
+      galleryFooterTheme: GalleryFooterThemeData(
+        backgroundColor: colorTheme.barsBg,
+        shareIconColor: colorTheme.textHighEmphasis,
+        titleTextStyle: textTheme.headlineBold,
+        gridIconButtonColor: colorTheme.textHighEmphasis,
+        bottomSheetBarrierColor: colorTheme.overlay,
+        bottomSheetBackgroundColor: colorTheme.barsBg,
+        bottomSheetPhotosTextStyle: textTheme.headlineBold,
+        bottomSheetCloseIconColor: colorTheme.textHighEmphasis,
+      ),
+      messageListViewTheme: MessageListViewThemeData(
+        backgroundColor: colorTheme.barsBg,
+      ),
+      channelListViewTheme: ChannelListViewThemeData(
+        backgroundColor: colorTheme.appBg,
+      ),
+      userListViewTheme: UserListViewThemeData(
+        backgroundColor: colorTheme.appBg,
+      ),
+      messageSearchListViewTheme: MessageSearchListViewThemeData(
+        backgroundColor: colorTheme.appBg,
+      ),
+    );
+  }
+
   /// The text themes used in the widgets
   final TextTheme textTheme;
 
@@ -50,28 +372,36 @@ class StreamChatThemeData {
   final ColorTheme colorTheme;
 
   /// Theme of the [ChannelPreview]
-  final ChannelPreviewTheme channelPreviewTheme;
+  final ChannelPreviewThemeData channelPreviewTheme;
 
   /// Theme of the [ChannelListHeader]
-  final ChannelListHeaderTheme channelListHeaderTheme;
+  final ChannelListHeaderThemeData channelListHeaderTheme;
 
-  /// Theme of the chat widgets dedicated to a channel
-  final ChannelTheme channelTheme;
+  /// Theme of the chat widgets dedicated to a channel header
+  final ChannelHeaderThemeData channelHeaderTheme;
+
+  /// The default style for [GalleryHeader]s below the overall
+  /// [StreamChatTheme].
+  final GalleryHeaderThemeData galleryHeaderTheme;
+
+  /// The default style for [GalleryFooter]s below the overall
+  /// [StreamChatTheme].
+  final GalleryFooterThemeData galleryFooterTheme;
 
   /// Theme of the current user messages
-  final MessageTheme ownMessageTheme;
+  final MessageThemeData ownMessageTheme;
 
   /// Theme of other users messages
-  final MessageTheme otherMessageTheme;
+  final MessageThemeData otherMessageTheme;
 
   /// Theme dedicated to the [MessageInput] widget
-  final MessageInputTheme messageInputTheme;
-
-  /// The widget that will be built when the channel image is unavailable
-  final Widget Function(BuildContext, Channel) defaultChannelImage;
+  final MessageInputThemeData messageInputTheme;
 
   /// The widget that will be built when the user image is unavailable
   final Widget Function(BuildContext, User) defaultUserImage;
+
+  /// The widget that will be built when the user image is loading
+  final Widget Function(BuildContext, User)? placeholderUserImage;
 
   /// Primary icon theme
   final IconThemeData primaryIconTheme;
@@ -79,989 +409,90 @@ class StreamChatThemeData {
   /// Assets used for rendering reactions
   final List<ReactionIcon> reactionIcons;
 
-  /// Create a theme from scratch
-  const StreamChatThemeData({
-    this.textTheme,
-    this.colorTheme,
-    this.channelListHeaderTheme,
-    this.channelPreviewTheme,
-    this.channelTheme,
-    this.otherMessageTheme,
-    this.ownMessageTheme,
-    this.messageInputTheme,
-    this.defaultChannelImage,
-    this.defaultUserImage,
-    this.primaryIconTheme,
-    this.reactionIcons,
-  });
+  /// Theme configuration for the [MessageListView] widget.
+  final MessageListViewThemeData messageListViewTheme;
 
-  /// Create a theme from a Material [Theme]
-  factory StreamChatThemeData.fromTheme(ThemeData theme) {
-    final defaultTheme = getDefaultTheme(theme);
-    final customizedTheme = StreamChatThemeData.fromColorAndTextTheme(
-      defaultTheme.colorTheme.copyWith(
-        accentBlue: theme.accentColor,
-      ),
-      defaultTheme.textTheme,
-    );
-    return defaultTheme.merge(customizedTheme) ?? customizedTheme;
-  }
+  /// Theme configuration for the [ChannelListView] widget.
+  final ChannelListViewThemeData channelListViewTheme;
 
-  /// Creates a copy of [StreamChatThemeData] with specified attributes overridden.
+  /// Theme configuration for the [UserListView] widget.
+  final UserListViewThemeData userListViewTheme;
+
+  /// Theme configuration for the [MessageSearchListView] widget.
+  final MessageSearchListViewThemeData messageSearchListViewTheme;
+
+  /// Creates a copy of [StreamChatThemeData] with specified attributes
+  /// overridden.
   StreamChatThemeData copyWith({
-    TextTheme textTheme,
-    ColorTheme colorTheme,
-    ChannelPreviewTheme channelPreviewTheme,
-    ChannelTheme channelTheme,
-    MessageTheme ownMessageTheme,
-    MessageTheme otherMessageTheme,
-    MessageInputTheme messageInputTheme,
-    Widget Function(BuildContext, Channel) defaultChannelImage,
-    Widget Function(BuildContext, User) defaultUserImage,
-    IconThemeData primaryIconTheme,
-    ChannelListHeaderTheme channelListHeaderTheme,
-    List<ReactionIcon> reactionIcons,
+    TextTheme? textTheme,
+    ColorTheme? colorTheme,
+    ChannelPreviewThemeData? channelPreviewTheme,
+    ChannelHeaderThemeData? channelHeaderTheme,
+    MessageThemeData? ownMessageTheme,
+    MessageThemeData? otherMessageTheme,
+    MessageInputThemeData? messageInputTheme,
+    Widget Function(BuildContext, User)? defaultUserImage,
+    Widget Function(BuildContext, User)? placeholderUserImage,
+    IconThemeData? primaryIconTheme,
+    ChannelListHeaderThemeData? channelListHeaderTheme,
+    List<ReactionIcon>? reactionIcons,
+    GalleryHeaderThemeData? galleryHeaderTheme,
+    GalleryFooterThemeData? galleryFooterTheme,
+    MessageListViewThemeData? messageListViewTheme,
+    ChannelListViewThemeData? channelListViewTheme,
+    UserListViewThemeData? userListViewTheme,
+    MessageSearchListViewThemeData? messageSearchListViewTheme,
   }) =>
-      StreamChatThemeData(
+      StreamChatThemeData.raw(
         channelListHeaderTheme:
-            channelListHeaderTheme ?? this.channelListHeaderTheme,
-        textTheme: textTheme ?? this.textTheme,
-        colorTheme: colorTheme ?? this.colorTheme,
-        primaryIconTheme: primaryIconTheme ?? this.primaryIconTheme,
-        defaultChannelImage: defaultChannelImage ?? this.defaultChannelImage,
+            this.channelListHeaderTheme.merge(channelListHeaderTheme),
+        textTheme: this.textTheme.merge(textTheme),
+        colorTheme: this.colorTheme.merge(colorTheme),
+        primaryIconTheme: this.primaryIconTheme.merge(primaryIconTheme),
         defaultUserImage: defaultUserImage ?? this.defaultUserImage,
-        channelPreviewTheme: channelPreviewTheme ?? this.channelPreviewTheme,
-        channelTheme: channelTheme ?? this.channelTheme,
-        ownMessageTheme: ownMessageTheme ?? this.ownMessageTheme,
-        otherMessageTheme: otherMessageTheme ?? this.otherMessageTheme,
-        messageInputTheme: messageInputTheme ?? this.messageInputTheme,
+        placeholderUserImage: placeholderUserImage ?? this.placeholderUserImage,
+        channelPreviewTheme:
+            this.channelPreviewTheme.merge(channelPreviewTheme),
+        channelHeaderTheme: this.channelHeaderTheme.merge(channelHeaderTheme),
+        ownMessageTheme: this.ownMessageTheme.merge(ownMessageTheme),
+        otherMessageTheme: this.otherMessageTheme.merge(otherMessageTheme),
+        messageInputTheme: this.messageInputTheme.merge(messageInputTheme),
         reactionIcons: reactionIcons ?? this.reactionIcons,
+        galleryHeaderTheme: galleryHeaderTheme ?? this.galleryHeaderTheme,
+        galleryFooterTheme: galleryFooterTheme ?? this.galleryFooterTheme,
+        messageListViewTheme: messageListViewTheme ?? this.messageListViewTheme,
+        channelListViewTheme: channelListViewTheme ?? this.channelListViewTheme,
+        userListViewTheme: userListViewTheme ?? this.userListViewTheme,
+        messageSearchListViewTheme:
+            messageSearchListViewTheme ?? this.messageSearchListViewTheme,
       );
 
-  StreamChatThemeData merge(StreamChatThemeData other) {
+  /// Merge themes
+  StreamChatThemeData merge(StreamChatThemeData? other) {
     if (other == null) return this;
     return copyWith(
       channelListHeaderTheme:
-          channelListHeaderTheme?.merge(other.channelListHeaderTheme) ??
-              other.channelListHeaderTheme,
-      textTheme: textTheme?.merge(other.textTheme) ?? other.textTheme,
-      colorTheme: colorTheme?.merge(other.colorTheme) ?? other.colorTheme,
+          channelListHeaderTheme.merge(other.channelListHeaderTheme),
+      textTheme: textTheme.merge(other.textTheme),
+      colorTheme: colorTheme.merge(other.colorTheme),
       primaryIconTheme: other.primaryIconTheme,
-      defaultChannelImage: other.defaultChannelImage,
       defaultUserImage: other.defaultUserImage,
-      channelPreviewTheme:
-          channelPreviewTheme?.merge(other.channelPreviewTheme) ??
-              other.channelPreviewTheme,
-      channelTheme:
-          channelTheme?.merge(other.channelTheme) ?? other.channelTheme,
-      ownMessageTheme: ownMessageTheme?.merge(other.ownMessageTheme) ??
-          other.ownMessageTheme,
-      otherMessageTheme: otherMessageTheme?.merge(other.otherMessageTheme) ??
-          other.otherMessageTheme,
-      messageInputTheme: messageInputTheme?.merge(other.messageInputTheme) ??
-          other.messageInputTheme,
+      placeholderUserImage: other.placeholderUserImage,
+      channelPreviewTheme: channelPreviewTheme.merge(other.channelPreviewTheme),
+      channelHeaderTheme: channelHeaderTheme.merge(other.channelHeaderTheme),
+      ownMessageTheme: ownMessageTheme.merge(other.ownMessageTheme),
+      otherMessageTheme: otherMessageTheme.merge(other.otherMessageTheme),
+      messageInputTheme: messageInputTheme.merge(other.messageInputTheme),
       reactionIcons: other.reactionIcons,
+      galleryHeaderTheme: galleryHeaderTheme.merge(other.galleryHeaderTheme),
+      galleryFooterTheme: galleryFooterTheme.merge(other.galleryFooterTheme),
+      messageListViewTheme:
+          messageListViewTheme.merge(other.messageListViewTheme),
+      channelListViewTheme:
+          channelListViewTheme.merge(other.channelListViewTheme),
+      userListViewTheme: userListViewTheme.merge(other.userListViewTheme),
+      messageSearchListViewTheme:
+          messageSearchListViewTheme.merge(other.messageSearchListViewTheme),
     );
   }
-
-  static StreamChatThemeData fromColorAndTextTheme(
-    ColorTheme colorTheme,
-    TextTheme textTheme,
-  ) {
-    final accentColor = colorTheme.accentBlue;
-    return StreamChatThemeData(
-      textTheme: textTheme,
-      colorTheme: colorTheme,
-      primaryIconTheme: IconThemeData(color: colorTheme.black.withOpacity(.5)),
-      defaultChannelImage: (context, channel) => SizedBox(),
-      defaultUserImage: (context, user) => Center(
-        child: CachedNetworkImage(
-          filterQuality: FilterQuality.high,
-          imageUrl: getRandomPicUrl(user),
-          fit: BoxFit.cover,
-        ),
-      ),
-      channelPreviewTheme: ChannelPreviewTheme(
-          unreadCounterColor: colorTheme.razz,
-          avatarTheme: AvatarTheme(
-            borderRadius: BorderRadius.circular(20),
-            constraints: BoxConstraints.tightFor(
-              height: 40,
-              width: 40,
-            ),
-          ),
-          title: textTheme.bodyBold,
-          subtitle: textTheme.footnote.copyWith(
-            color: Color(0xff7A7A7A),
-          ),
-          lastMessageAt: textTheme.footnote.copyWith(
-            color: colorTheme.black.withOpacity(.5),
-          ),
-          indicatorIconSize: 16.0),
-      channelListHeaderTheme: ChannelListHeaderTheme(
-        avatarTheme: AvatarTheme(
-          borderRadius: BorderRadius.circular(20),
-          constraints: BoxConstraints.tightFor(
-            height: 40,
-            width: 40,
-          ),
-        ),
-        color: colorTheme.white,
-        title: textTheme.headlineBold,
-      ),
-      channelTheme: ChannelTheme(
-        channelHeaderTheme: ChannelHeaderTheme(
-          avatarTheme: AvatarTheme(
-            borderRadius: BorderRadius.circular(20),
-            constraints: BoxConstraints.tightFor(
-              height: 40,
-              width: 40,
-            ),
-          ),
-          color: colorTheme.white,
-          title: textTheme.headlineBold,
-          subtitle: textTheme.footnote.copyWith(
-            color: Color(0xff7A7A7A),
-          ),
-        ),
-      ),
-      ownMessageTheme: MessageTheme(
-        messageAuthor: textTheme.footnote.copyWith(color: colorTheme.grey),
-        // messageText: textTheme.body,
-        messageText: textTheme.body.copyWith(color: Colors.white),
-        createdAt: textTheme.footnote.copyWith(color: colorTheme.grey),
-        replies: textTheme.footnoteBold.copyWith(color: accentColor),
-        // messageBackgroundColor: colorTheme.greyGainsboro,
-        messageBackgroundColor: colorTheme.razz,
-        reactionsBackgroundColor: colorTheme.white,
-        reactionsBorderColor: colorTheme.greyWhisper,
-        reactionsMaskColor: colorTheme.whiteSnow,
-        messageBorderColor: colorTheme.greyGainsboro,
-        avatarTheme: AvatarTheme(
-          borderRadius: BorderRadius.circular(20),
-          constraints: BoxConstraints.tightFor(
-            height: 32,
-            width: 32,
-          ),
-        ),
-        messageLinks: TextStyle(
-          color: accentColor,
-        ),
-      ),
-      otherMessageTheme: MessageTheme(
-        reactionsBackgroundColor: colorTheme.greyGainsboro,
-        reactionsBorderColor: colorTheme.white,
-        reactionsMaskColor: colorTheme.whiteSnow,
-        messageText: textTheme.body,
-        createdAt: textTheme.footnote.copyWith(color: colorTheme.grey),
-        messageAuthor: textTheme.footnote.copyWith(color: colorTheme.grey),
-        replies: textTheme.footnoteBold.copyWith(color: accentColor),
-        messageLinks: TextStyle(
-          color: accentColor,
-        ),
-        messageBackgroundColor: colorTheme.white,
-        messageBorderColor: colorTheme.greyWhisper,
-        avatarTheme: AvatarTheme(
-          borderRadius: BorderRadius.circular(20),
-          constraints: BoxConstraints.tightFor(
-            height: 32,
-            width: 32,
-          ),
-        ),
-      ),
-      messageInputTheme: MessageInputTheme(
-        borderRadius: BorderRadius.circular(20),
-        sendAnimationDuration: Duration(milliseconds: 300),
-        actionButtonColor: colorTheme.razz,
-        actionButtonIdleColor: colorTheme.grey,
-        expandButtonColor: colorTheme.razz,
-        sendButtonColor: colorTheme.razz,
-        sendButtonIdleColor: colorTheme.greyGainsboro,
-        inputBackground: colorTheme.white,
-        inputTextStyle: textTheme.body,
-        idleBorderGradient: LinearGradient(
-          colors: [
-            colorTheme.greyGainsboro,
-            colorTheme.greyGainsboro,
-          ],
-        ),
-        activeBorderGradient: LinearGradient(
-          colors: [
-            colorTheme.greyGainsboro,
-            colorTheme.greyGainsboro,
-          ],
-        ),
-      ),
-      reactionIcons: [
-        ReactionIcon(
-          type: 'love',
-          assetName: 'Icon_love_reaction.svg',
-        ),
-        ReactionIcon(
-          type: 'like',
-          assetName: 'Icon_thumbs_up_reaction.svg',
-        ),
-        ReactionIcon(
-          type: 'sad',
-          assetName: 'Icon_thumbs_down_reaction.svg',
-        ),
-        ReactionIcon(
-          type: 'haha',
-          assetName: 'Icon_LOL_reaction.svg',
-        ),
-        ReactionIcon(
-          type: 'wow',
-          assetName: 'Icon_wut_reaction.svg',
-        ),
-      ],
-    );
-  }
-
-  /// Get the default Stream Chat theme
-  static StreamChatThemeData getDefaultTheme(ThemeData theme) {
-    final isDark = theme.brightness == Brightness.dark;
-    final textTheme = isDark ? TextTheme.dark() : TextTheme.light();
-    final colorTheme = isDark ? ColorTheme.dark() : ColorTheme.light();
-    return fromColorAndTextTheme(
-      colorTheme,
-      textTheme,
-    );
-  }
-}
-
-enum TextThemeType {
-  light,
-  dark,
-}
-
-class TextTheme {
-  final TextStyle title;
-  final TextStyle headlineBold;
-  final TextStyle headline;
-  final TextStyle bodyBold;
-  final TextStyle body;
-  final TextStyle footnoteBold;
-  final TextStyle footnote;
-  final TextStyle captionBold;
-
-  TextTheme.light({
-    this.title = const TextStyle(
-      fontSize: 22,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-    this.headlineBold = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-    this.headline = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: Colors.black,
-    ),
-    this.bodyBold = const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-    this.body = const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: Colors.black,
-    ),
-    this.footnoteBold = const TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-      color: Colors.black,
-    ),
-    this.footnote = const TextStyle(
-      fontSize: 12,
-      color: Colors.black,
-    ),
-    this.captionBold = const TextStyle(
-      fontSize: 10,
-      fontWeight: FontWeight.bold,
-      color: Colors.black,
-    ),
-  });
-
-  TextTheme.dark({
-    this.title = const TextStyle(
-      fontSize: 22,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    this.headlineBold = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    this.headline = const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-    ),
-    this.bodyBold = const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    this.body = const TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-    ),
-    this.footnoteBold = const TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-    ),
-    this.footnote = const TextStyle(
-      fontSize: 12,
-      color: Colors.white,
-    ),
-    this.captionBold = const TextStyle(
-      fontSize: 10,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-  });
-
-  TextTheme copyWith({
-    TextThemeType type = TextThemeType.light,
-    TextStyle body,
-    TextStyle title,
-    TextStyle headlineBold,
-    TextStyle headline,
-    TextStyle bodyBold,
-    TextStyle footnoteBold,
-    TextStyle footnote,
-    TextStyle captionBold,
-  }) {
-    return type == TextThemeType.light
-        ? TextTheme.light(
-            body: body ?? this.body,
-            title: title ?? this.title,
-            headlineBold: headlineBold ?? this.headlineBold,
-            headline: headline ?? this.headline,
-            bodyBold: bodyBold ?? this.bodyBold,
-            footnoteBold: footnoteBold ?? this.footnoteBold,
-            footnote: footnote ?? this.footnote,
-            captionBold: captionBold ?? this.captionBold,
-          )
-        : TextTheme.dark(
-            body: body ?? this.body,
-            title: title ?? this.title,
-            headlineBold: headlineBold ?? this.headlineBold,
-            headline: headline ?? this.headline,
-            bodyBold: bodyBold ?? this.bodyBold,
-            footnoteBold: footnoteBold ?? this.footnoteBold,
-            footnote: footnote ?? this.footnote,
-            captionBold: captionBold ?? this.captionBold,
-          );
-  }
-
-  TextTheme merge(TextTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      body: body?.merge(other.body) ?? other.body,
-      title: title?.merge(other.title) ?? other.title,
-      headlineBold:
-          headlineBold?.merge(other.headlineBold) ?? other.headlineBold,
-      headline: headline?.merge(other.headline) ?? other.headline,
-      bodyBold: bodyBold?.merge(other.bodyBold) ?? other.bodyBold,
-      footnoteBold:
-          footnoteBold?.merge(other.footnoteBold) ?? other.footnoteBold,
-      footnote: footnote?.merge(other.footnote) ?? other.footnote,
-      captionBold: captionBold?.merge(other.captionBold) ?? other.captionBold,
-    );
-  }
-}
-
-enum ColorThemeType {
-  light,
-  dark,
-}
-
-class ColorTheme {
-  final Color black;
-  final Color grey;
-  final Color greyGainsboro;
-  final Color greyWhisper;
-  final Color whiteSmoke;
-  final Color whiteSnow;
-  final Color white;
-  final Color blueAlice;
-  final Color accentBlue;
-  final Color accentRed;
-  final Color accentGreen;
-  final Effect borderTop;
-  final Effect borderBottom;
-  final Effect shadowIconButton;
-  final Effect modalShadow;
-  final Color highlight;
-  final Color overlay;
-  final Color overlayDark;
-  final Color razz;
-  final Gradient bgGradient;
-
-  ColorTheme.light({
-    this.black = const Color(0xff000000),
-    this.grey = const Color(0xff7a7a7a),
-    this.greyGainsboro = const Color(0xffdbdbdb),
-    this.greyWhisper = const Color(0xffecebeb),
-    this.whiteSmoke = const Color(0xfff2f2f2),
-    this.whiteSnow = const Color(0xfffcfcfc),
-    this.white = const Color(0xffffffff),
-    this.blueAlice = const Color(0xffe9f2ff),
-    this.accentBlue = const Color(0xff005FFF),
-    this.accentRed = const Color(0xffFF3842),
-    this.accentGreen = const Color(0xff20E070),
-    this.highlight = const Color(0xfffbf4dd),
-    this.overlay = const Color.fromRGBO(0, 0, 0, 0.2),
-    this.overlayDark = const Color.fromRGBO(0, 0, 0, 0.6),
-    this.razz = const Color(0xFFE31469),
-    this.bgGradient = const LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Color(0xfff7f7f7), Color(0xfffcfcfc)],
-      stops: [0, 1],
-    ),
-    this.borderTop = const Effect(
-        sigmaX: 0,
-        sigmaY: -1,
-        color: Color(0xff000000),
-        blur: 0.0,
-        alpha: 0.08),
-    this.borderBottom = const Effect(
-        sigmaX: 0, sigmaY: 1, color: Color(0xff000000), blur: 0.0, alpha: 0.08),
-    this.shadowIconButton = const Effect(
-        sigmaX: 0, sigmaY: 2, color: Color(0xff000000), alpha: 0.5, blur: 4.0),
-    this.modalShadow = const Effect(
-        sigmaX: 0, sigmaY: 0, color: Color(0xff000000), alpha: 1, blur: 8.0),
-  });
-
-  ColorTheme.dark({
-    this.black = const Color(0xffffffff),
-    this.grey = const Color(0xff7a7a7a),
-    this.greyGainsboro = const Color(0xff2d2f2f),
-    this.greyWhisper = const Color(0xff1c1e22),
-    this.whiteSmoke = const Color(0xff13151b),
-    this.whiteSnow = const Color(0xff070A0D),
-    this.white = const Color(0xff101418),
-    this.blueAlice = const Color(0xff00193D),
-    this.accentBlue = const Color(0xff005FFF),
-    this.accentRed = const Color(0xffFF3742),
-    this.accentGreen = const Color(0xff20E070),
-    this.razz = const Color(0xFFE31469),
-    this.borderTop = const Effect(
-        sigmaX: 0, sigmaY: -1, color: Color(0xff141924), blur: 0.0),
-    this.borderBottom = const Effect(
-        sigmaX: 0, sigmaY: 1, color: Color(0xff141924), blur: 0.0, alpha: 1.0),
-    this.shadowIconButton = const Effect(
-        sigmaX: 0, sigmaY: 2, color: Color(0xff000000), alpha: 0.5, blur: 4.0),
-    this.modalShadow = const Effect(
-        sigmaX: 0, sigmaY: 0, color: Color(0xff000000), alpha: 1, blur: 8.0),
-    this.highlight = const Color(0xff302d22),
-    this.overlay = const Color.fromRGBO(0, 0, 0, 0.4),
-    this.overlayDark = const Color.fromRGBO(255, 255, 255, 0.6),
-    this.bgGradient = const LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        Color(0xff101214),
-        Color(0xff070a0d),
-      ],
-      stops: [0, 1],
-    ),
-  });
-
-  ColorTheme copyWith({
-    ColorThemeType type = ColorThemeType.light,
-    Color black,
-    Color grey,
-    Color greyGainsboro,
-    Color greyWhisper,
-    Color whiteSmoke,
-    Color whiteSnow,
-    Color white,
-    Color blueAlice,
-    Color accentBlue,
-    Color accentRed,
-    Color accentGreen,
-    Effect borderTop,
-    Effect borderBottom,
-    Effect shadowIconButton,
-    Effect modalShadow,
-    Color highlight,
-    Color overlay,
-    Color overlayDark,
-    Gradient bgGradient,
-    Color razz
-  }) {
-    return type == ColorThemeType.light
-        ? ColorTheme.light(
-            black: black ?? this.black,
-            grey: grey ?? this.grey,
-            greyGainsboro: greyGainsboro ?? this.greyGainsboro,
-            greyWhisper: greyWhisper ?? this.greyWhisper,
-            whiteSmoke: whiteSmoke ?? this.whiteSmoke,
-            whiteSnow: whiteSnow ?? this.whiteSnow,
-            white: white ?? this.white,
-            blueAlice: blueAlice ?? this.blueAlice,
-            accentBlue: accentBlue ?? this.accentBlue,
-            accentRed: accentRed ?? this.accentRed,
-            accentGreen: accentGreen ?? this.accentGreen,
-            borderTop: borderTop ?? this.borderTop,
-            borderBottom: borderBottom ?? this.borderBottom,
-            shadowIconButton: shadowIconButton ?? this.shadowIconButton,
-            modalShadow: modalShadow ?? this.modalShadow,
-            highlight: highlight ?? this.highlight,
-            overlay: overlay ?? this.overlay,
-            overlayDark: overlayDark ?? this.overlayDark,
-            bgGradient: bgGradient ?? this.bgGradient,
-            razz: razz ?? this.razz,
-          )
-        : ColorTheme.dark(
-            black: black ?? this.black,
-            grey: grey ?? this.grey,
-            greyGainsboro: greyGainsboro ?? this.greyGainsboro,
-            greyWhisper: greyWhisper ?? this.greyWhisper,
-            whiteSmoke: whiteSmoke ?? this.whiteSmoke,
-            whiteSnow: whiteSnow ?? this.whiteSnow,
-            white: white ?? this.white,
-            blueAlice: blueAlice ?? this.blueAlice,
-            accentBlue: accentBlue ?? this.accentBlue,
-            accentRed: accentRed ?? this.accentRed,
-            accentGreen: accentGreen ?? this.accentGreen,
-            borderTop: borderTop ?? this.borderTop,
-            borderBottom: borderBottom ?? this.borderBottom,
-            shadowIconButton: shadowIconButton ?? this.shadowIconButton,
-            modalShadow: modalShadow ?? this.modalShadow,
-            highlight: highlight ?? this.highlight,
-            overlay: overlay ?? this.overlay,
-            overlayDark: overlayDark ?? this.overlayDark,
-            bgGradient: bgGradient ?? this.bgGradient,
-            razz: razz ?? this.razz,
-          );
-  }
-
-  ColorTheme merge(ColorTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      black: other.black,
-      grey: other.grey,
-      greyGainsboro: other.greyGainsboro,
-      greyWhisper: other.greyWhisper,
-      whiteSmoke: other.whiteSmoke,
-      whiteSnow: other.whiteSnow,
-      white: other.white,
-      blueAlice: other.blueAlice,
-      accentBlue: other.accentBlue,
-      accentRed: other.accentRed,
-      accentGreen: other.accentGreen,
-      highlight: other.highlight,
-      overlay: other.overlay,
-      overlayDark: other.overlayDark,
-      bgGradient: other.bgGradient,
-      borderTop: other.borderTop,
-      borderBottom: other.borderBottom,
-      shadowIconButton: other.shadowIconButton,
-      modalShadow: other.modalShadow,
-      razz: other.razz
-    );
-  }
-}
-
-/// Channel theme data
-class ChannelTheme {
-  /// Theme of the [ChannelHeader] widget
-  final ChannelHeaderTheme channelHeaderTheme;
-
-  ChannelTheme({
-    this.channelHeaderTheme,
-  });
-
-  /// Creates a copy of [ChannelTheme] with specified attributes overridden.
-  ChannelTheme copyWith({
-    ChannelHeaderTheme channelHeaderTheme,
-  }) =>
-      ChannelTheme(
-        channelHeaderTheme: channelHeaderTheme ?? this.channelHeaderTheme,
-      );
-
-  ChannelTheme merge(ChannelTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      channelHeaderTheme: channelHeaderTheme?.merge(other.channelHeaderTheme) ??
-          other.channelHeaderTheme,
-    );
-  }
-}
-
-class AvatarTheme {
-  final BoxConstraints constraints;
-  final BorderRadius borderRadius;
-
-  AvatarTheme({
-    this.constraints,
-    this.borderRadius,
-  });
-
-  AvatarTheme copyWith({
-    BoxConstraints constraints,
-    BorderRadius borderRadius,
-  }) =>
-      AvatarTheme(
-        constraints: constraints ?? this.constraints,
-        borderRadius: borderRadius ?? this.borderRadius,
-      );
-
-  AvatarTheme merge(AvatarTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      constraints: other.constraints,
-      borderRadius: other.borderRadius,
-    );
-  }
-}
-
-class MessageTheme {
-  final TextStyle messageText;
-  final TextStyle messageAuthor;
-  final TextStyle messageLinks;
-  final TextStyle createdAt;
-  final TextStyle replies;
-  final Color messageBackgroundColor;
-  final Color messageBorderColor;
-  final Color reactionsBackgroundColor;
-  final Color reactionsBorderColor;
-  final Color reactionsMaskColor;
-  final AvatarTheme avatarTheme;
-
-  const MessageTheme({
-    this.replies,
-    this.messageText,
-    this.messageAuthor,
-    this.messageLinks,
-    this.messageBackgroundColor,
-    this.messageBorderColor,
-    this.reactionsBackgroundColor,
-    this.reactionsBorderColor,
-    this.reactionsMaskColor,
-    this.avatarTheme,
-    this.createdAt,
-  });
-
-  MessageTheme copyWith({
-    TextStyle messageText,
-    TextStyle messageAuthor,
-    TextStyle messageLinks,
-    TextStyle createdAt,
-    TextStyle replies,
-    Color messageBackgroundColor,
-    Color messageBorderColor,
-    AvatarTheme avatarTheme,
-    Color reactionsBackgroundColor,
-    Color reactionsBorderColor,
-    Color reactionsMaskColor,
-  }) =>
-      MessageTheme(
-        messageText: messageText ?? this.messageText,
-        messageAuthor: messageAuthor ?? this.messageAuthor,
-        messageLinks: messageLinks ?? this.messageLinks,
-        createdAt: createdAt ?? this.createdAt,
-        messageBackgroundColor:
-            messageBackgroundColor ?? this.messageBackgroundColor,
-        messageBorderColor: messageBorderColor ?? this.messageBorderColor,
-        avatarTheme: avatarTheme ?? this.avatarTheme,
-        replies: replies ?? this.replies,
-        reactionsBackgroundColor:
-            reactionsBackgroundColor ?? this.reactionsBackgroundColor,
-        reactionsBorderColor: reactionsBorderColor ?? this.reactionsBorderColor,
-        reactionsMaskColor: reactionsMaskColor ?? this.reactionsMaskColor,
-      );
-
-  MessageTheme merge(MessageTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      messageText: messageText?.merge(other.messageText) ?? other.messageText,
-      messageAuthor:
-          messageAuthor?.merge(other.messageAuthor) ?? other.messageAuthor,
-      messageLinks:
-          messageLinks?.merge(other.messageLinks) ?? other.messageLinks,
-      createdAt: createdAt?.merge(other.createdAt) ?? other.createdAt,
-      replies: replies?.merge(other.replies) ?? other.replies,
-      messageBackgroundColor: other.messageBackgroundColor,
-      messageBorderColor: other.messageBorderColor,
-      avatarTheme: avatarTheme?.merge(other.avatarTheme) ?? other.avatarTheme,
-      reactionsBackgroundColor: other.reactionsBackgroundColor,
-      reactionsBorderColor: other.reactionsBorderColor,
-      reactionsMaskColor: other.reactionsMaskColor,
-    );
-  }
-}
-
-class ChannelPreviewTheme {
-  final TextStyle title;
-  final TextStyle subtitle;
-  final TextStyle lastMessageAt;
-  final AvatarTheme avatarTheme;
-  final Color unreadCounterColor;
-  final double indicatorIconSize;
-
-  const ChannelPreviewTheme({
-    this.title,
-    this.subtitle,
-    this.lastMessageAt,
-    this.avatarTheme,
-    this.unreadCounterColor,
-    this.indicatorIconSize,
-  });
-
-  ChannelPreviewTheme copyWith({
-    TextStyle title,
-    TextStyle subtitle,
-    TextStyle lastMessageAt,
-    AvatarTheme avatarTheme,
-    Color unreadCounterColor,
-    double indicatorIconSize,
-  }) =>
-      ChannelPreviewTheme(
-        title: title ?? this.title,
-        subtitle: subtitle ?? this.subtitle,
-        lastMessageAt: lastMessageAt ?? this.lastMessageAt,
-        avatarTheme: avatarTheme ?? this.avatarTheme,
-        unreadCounterColor: unreadCounterColor ?? this.unreadCounterColor,
-        indicatorIconSize: indicatorIconSize ?? this.indicatorIconSize,
-      );
-
-  ChannelPreviewTheme merge(ChannelPreviewTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      title: title?.merge(other.title) ?? other.title,
-      subtitle: subtitle?.merge(other.subtitle) ?? other.subtitle,
-      lastMessageAt:
-          lastMessageAt?.merge(other.lastMessageAt) ?? other.lastMessageAt,
-      avatarTheme: avatarTheme?.merge(other.avatarTheme) ?? other.avatarTheme,
-      unreadCounterColor: other.unreadCounterColor,
-    );
-  }
-}
-
-class ChannelHeaderTheme {
-  final TextStyle title;
-  final TextStyle subtitle;
-  final AvatarTheme avatarTheme;
-  final Color color;
-
-  const ChannelHeaderTheme({
-    this.title,
-    this.subtitle,
-    this.avatarTheme,
-    this.color,
-  });
-
-  ChannelHeaderTheme copyWith({
-    TextStyle title,
-    TextStyle subtitle,
-    AvatarTheme avatarTheme,
-    Color color,
-  }) =>
-      ChannelHeaderTheme(
-        title: title ?? this.title,
-        subtitle: subtitle ?? this.subtitle,
-        avatarTheme: avatarTheme ?? this.avatarTheme,
-        color: color ?? this.color,
-      );
-
-  ChannelHeaderTheme merge(ChannelHeaderTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      title: title?.merge(other.title) ?? other.title,
-      subtitle: subtitle?.merge(other.subtitle) ?? other.subtitle,
-      avatarTheme: avatarTheme?.merge(other.avatarTheme) ?? other.avatarTheme,
-      color: other.color,
-    );
-  }
-}
-
-/// Theme dedicated to the [ChannelListHeader]
-class ChannelListHeaderTheme {
-  /// Style of the title text
-  final TextStyle title;
-
-  /// Theme dedicated to the userAvatar
-  final AvatarTheme avatarTheme;
-
-  /// Background color of the appbar
-  final Color color;
-
-  /// Returns a new [ChannelListHeaderTheme]
-  const ChannelListHeaderTheme({
-    this.title,
-    this.avatarTheme,
-    this.color,
-  });
-
-  /// Returns a new [ChannelListHeaderTheme] replacing some of its properties
-  ChannelListHeaderTheme copyWith({
-    TextStyle title,
-    AvatarTheme avatarTheme,
-    Color color,
-  }) =>
-      ChannelListHeaderTheme(
-        title: title ?? this.title,
-        avatarTheme: avatarTheme ?? this.avatarTheme,
-        color: color ?? this.color,
-      );
-
-  /// Merges [this] [ChannelListHeaderTheme] with the [other]
-  ChannelListHeaderTheme merge(ChannelListHeaderTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      title: title?.merge(other.title) ?? other.title,
-      avatarTheme: avatarTheme?.merge(other.avatarTheme) ?? other.avatarTheme,
-      color: other.color,
-    );
-  }
-}
-
-/// Defines the theme dedicated to the [MessageInput] widget
-class MessageInputTheme {
-  /// Duration of the [MessageInput] send button animation
-  final Duration sendAnimationDuration;
-
-  /// Background color of [MessageInput] send button
-  final Color sendButtonColor;
-
-  /// Background color of [MessageInput] action buttons
-  final Color actionButtonColor;
-
-  /// Background color of [MessageInput] send button
-  final Color sendButtonIdleColor;
-
-  /// Background color of [MessageInput] action buttons
-  final Color actionButtonIdleColor;
-
-  /// Background color of [MessageInput] expand button
-  final Color expandButtonColor;
-
-  /// Background color of [MessageInput]
-  final Color inputBackground;
-
-  /// TextStyle of [MessageInput]
-  final TextStyle inputTextStyle;
-
-  /// InputDecoration of [MessageInput]
-  final InputDecoration inputDecoration;
-
-  /// Border gradient when the [MessageInput] is not focused
-  final Gradient idleBorderGradient;
-
-  /// Border gradient when the [MessageInput] is focused
-  final Gradient activeBorderGradient;
-
-  /// Border radius of [MessageInput]
-  final BorderRadius borderRadius;
-
-  /// Returns a new [MessageInputTheme]
-  const MessageInputTheme({
-    this.sendAnimationDuration,
-    this.actionButtonColor,
-    this.sendButtonColor,
-    this.actionButtonIdleColor,
-    this.sendButtonIdleColor,
-    this.inputBackground,
-    this.inputTextStyle,
-    this.inputDecoration,
-    this.activeBorderGradient,
-    this.idleBorderGradient,
-    this.borderRadius,
-    this.expandButtonColor,
-  });
-
-  /// Returns a new [MessageInputTheme] replacing some of its properties
-  MessageInputTheme copyWith({
-    Duration sendAnimationDuration,
-    Color inputBackground,
-    Color actionButtonColor,
-    Color sendButtonColor,
-    Color actionButtonIdleColor,
-    Color sendButtonIdleColor,
-    Color expandButtonColor,
-    TextStyle inputTextStyle,
-    InputDecoration inputDecoration,
-    Gradient activeBorderGradient,
-    Gradient idleBorderGradient,
-    BorderRadius borderRadius,
-  }) =>
-      MessageInputTheme(
-        sendAnimationDuration:
-            sendAnimationDuration ?? this.sendAnimationDuration,
-        inputBackground: inputBackground ?? this.inputBackground,
-        actionButtonColor: actionButtonColor ?? this.actionButtonColor,
-        sendButtonColor: sendButtonColor ?? this.sendButtonColor,
-        actionButtonIdleColor:
-            actionButtonIdleColor ?? this.actionButtonIdleColor,
-        expandButtonColor: expandButtonColor ?? this.expandButtonColor,
-        inputTextStyle: inputTextStyle ?? this.inputTextStyle,
-        sendButtonIdleColor: sendButtonIdleColor ?? this.sendButtonIdleColor,
-        inputDecoration: inputDecoration ?? this.inputDecoration,
-        activeBorderGradient: activeBorderGradient ?? this.activeBorderGradient,
-        idleBorderGradient: idleBorderGradient ?? this.idleBorderGradient,
-        borderRadius: borderRadius ?? this.borderRadius,
-      );
-
-  /// Merges [this] [MessageInputTheme] with the [other]
-  MessageInputTheme merge(MessageInputTheme other) {
-    if (other == null) return this;
-    return copyWith(
-      sendAnimationDuration: other.sendAnimationDuration,
-      inputBackground: other.inputBackground,
-      actionButtonColor: other.actionButtonColor,
-      actionButtonIdleColor: other.actionButtonIdleColor,
-      sendButtonColor: other.sendButtonColor,
-      sendButtonIdleColor: other.sendButtonIdleColor,
-      inputTextStyle: other.inputTextStyle,
-      inputDecoration: inputDecoration?.merge(other.inputDecoration) ??
-          other.inputDecoration,
-      activeBorderGradient: other.activeBorderGradient,
-      idleBorderGradient: other.idleBorderGradient,
-      borderRadius: other.borderRadius,
-      expandButtonColor: other.expandButtonColor,
-    );
-  }
-}
-
-class Effect {
-  final double sigmaX;
-  final double sigmaY;
-  final Color color;
-  final double alpha;
-  final double blur;
-
-  const Effect({
-    this.sigmaX,
-    this.sigmaY,
-    this.color,
-    this.alpha,
-    this.blur,
-  });
-
-  Effect copyWith({
-    double sigmaX,
-    double sigmaY,
-    Color color,
-    double alpha,
-    double blur,
-  }) =>
-      Effect(
-        sigmaX: sigmaX ?? this.sigmaX,
-        sigmaY: sigmaY ?? this.sigmaY,
-        color: color ?? this.color,
-        alpha: color ?? this.alpha,
-        blur: blur ?? this.blur,
-      );
 }

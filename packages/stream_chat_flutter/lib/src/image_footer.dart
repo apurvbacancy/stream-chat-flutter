@@ -15,25 +15,25 @@ import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 class ImageFooter extends StatefulWidget implements PreferredSizeWidget {
   /// Callback to call when pressing the back button.
   /// By default it calls [Navigator.pop]
-  final VoidCallback onBackPressed;
+  final VoidCallback? onBackPressed;
 
   /// Callback to call when the header is tapped.
-  final VoidCallback onTitleTap;
+  final VoidCallback? onTitleTap;
 
   /// Callback to call when the image is tapped.
-  final VoidCallback onImageTap;
+  final VoidCallback? onImageTap;
 
   final int currentPage;
   final int totalPages;
 
-  final List<Attachment> mediaAttachments;
-  final Message message;
+  final List<Attachment>? mediaAttachments;
+  final Message? message;
 
-  final ValueChanged<int> mediaSelectedCallBack;
+  final ValueChanged<int>? mediaSelectedCallBack;
 
   /// Creates a channel header
   ImageFooter({
-    Key key,
+    Key? key,
     this.onBackPressed,
     this.onTitleTap,
     this.onImageTap,
@@ -53,13 +53,13 @@ class ImageFooter extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _ImageFooterState extends State<ImageFooter> {
-  TextEditingController _searchController;
+  late TextEditingController _searchController;
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFocusNode = FocusNode();
 
   final List<Channel> _selectedChannels = [];
 
-  Function modalSetStateCallback;
+  late Function modalSetStateCallback;
 
   @override
   void initState() {
@@ -100,11 +100,11 @@ class _ImageFooterState extends State<ImageFooter> {
                       iconSize: 40,
                       icon: StreamSvgIcon.iconShare(
                         size: 40.0,
-                        color: StreamChatTheme.of(context).colorTheme.black,
+                        color: StreamChatTheme.of(context).colorTheme.textLowEmphasis,
                       ),
                       onPressed: () async {
                         final attachment =
-                            widget.mediaAttachments[widget.currentPage];
+                            widget.mediaAttachments![widget.currentPage];
                         final url = attachment.imageUrl ??
                             attachment.assetUrl ??
                             attachment.thumbUrl;
@@ -112,7 +112,7 @@ class _ImageFooterState extends State<ImageFooter> {
                             ? 'jpg'
                             : url?.split('?')?.first?.split('.')?.last ?? 'jpg';
                         final request =
-                            await HttpClient().getUrl(Uri.parse(url));
+                            await HttpClient().getUrl(Uri.parse(url!));
                         final response = await request.close();
                         final bytes =
                             await consolidateHttpClientResponseBytes(response);
@@ -150,7 +150,7 @@ class _ImageFooterState extends State<ImageFooter> {
                 iconSize: 40,
                 icon: StreamSvgIcon.iconGrid(
                   size: 40,
-                  color: StreamChatTheme.of(context).colorTheme.black,
+                  color: StreamChatTheme.of(context).colorTheme.textLowEmphasis,
                 ),
                 onPressed: () => _showPhotosModal(context),
               ),
@@ -176,7 +176,7 @@ class _ImageFooterState extends State<ImageFooter> {
       builder: (context) {
         final crossAxisCount = 3;
         final noOfRowToShowInitially =
-            widget.mediaAttachments.length > crossAxisCount ? 2 : 1;
+            widget.mediaAttachments!.length > crossAxisCount ? 2 : 1;
         final size = MediaQuery.of(context).size;
         final initialChildSize =
             48 + (size.width * noOfRowToShowInitially) / crossAxisCount;
@@ -184,8 +184,7 @@ class _ImageFooterState extends State<ImageFooter> {
           expand: false,
           initialChildSize: initialChildSize / size.height,
           minChildSize: initialChildSize / size.height,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
+          builder: (context, scrollController) => SingleChildScrollView(
               controller: scrollController,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -207,7 +206,7 @@ class _ImageFooterState extends State<ImageFooter> {
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: StreamSvgIcon.close(
-                            color: StreamChatTheme.of(context).colorTheme.black,
+                            color: StreamChatTheme.of(context).colorTheme.textLowEmphasis,
                           ),
                           onPressed: () => Navigator.maybePop(context),
                         ),
@@ -218,36 +217,36 @@ class _ImageFooterState extends State<ImageFooter> {
                     child: GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: widget.mediaAttachments.length,
+                      itemCount: widget.mediaAttachments!.length,
                       padding: const EdgeInsets.all(1),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
-                        mainAxisSpacing: 2.0,
-                        crossAxisSpacing: 2.0,
+                        mainAxisSpacing: 2,
+                        crossAxisSpacing: 2,
                       ),
                       itemBuilder: (context, index) {
                         Widget media;
-                        final attachment = widget.mediaAttachments[index];
+                        final attachment = widget.mediaAttachments![index];
                         if (attachment.type == 'video') {
                           media = InkWell(
-                            onTap: () => widget.mediaSelectedCallBack(index),
+                            onTap: () => widget.mediaSelectedCallBack!(index),
                             child: FittedBox(
                               fit: BoxFit.cover,
                               child: VideoThumbnailImage(
                                 video: attachment.file?.path ??
-                                    attachment.assetUrl,
+                                    attachment.assetUrl!,
                               ),
                             ),
                           );
                         } else {
                           media = InkWell(
-                            onTap: () => widget.mediaSelectedCallBack(index),
+                            onTap: () => widget.mediaSelectedCallBack!(index),
                             child: AspectRatio(
                               aspectRatio: 1.0,
                               child: CachedNetworkImage(
                                 imageUrl: attachment.imageUrl ??
                                     attachment.assetUrl ??
-                                    attachment.thumbUrl,
+                                    attachment.thumbUrl!,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -269,14 +268,14 @@ class _ImageFooterState extends State<ImageFooter> {
                                       blurRadius: 8.0,
                                       color: StreamChatTheme.of(context)
                                           .colorTheme
-                                          .black
+                                          .textLowEmphasis
                                           .withOpacity(0.3),
                                     ),
                                   ],
                                 ),
                                 padding: const EdgeInsets.all(2),
                                 child: UserAvatar(
-                                  user: widget.message.user,
+                                  user: widget.message!.user!,
                                   constraints:
                                       BoxConstraints.tight(Size(24, 24)),
                                   showOnlineStatus: false,
@@ -290,8 +289,7 @@ class _ImageFooterState extends State<ImageFooter> {
                   ),
                 ],
               ),
-            );
-          },
+            ),
         );
       },
     );
@@ -301,7 +299,7 @@ class _ImageFooterState extends State<ImageFooter> {
   Future sendMessage() async {
     var text = _messageController.text.trim();
 
-    final attachments = widget.message.attachments;
+    final attachments = widget.message!.attachments;
 
     _messageController.clear();
 

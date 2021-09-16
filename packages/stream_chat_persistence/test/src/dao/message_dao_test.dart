@@ -5,12 +5,14 @@ import 'package:stream_chat_persistence/src/dao/dao.dart';
 import 'package:stream_chat_persistence/src/db/moor_chat_database.dart';
 import 'package:test/test.dart';
 
+import '../../stream_chat_persistence_client_test.dart';
+
 void main() {
-  MessageDao messageDao;
-  MoorChatDatabase database;
+  late MessageDao messageDao;
+  late MoorChatDatabase database;
 
   setUp(() {
-    database = MoorChatDatabase.testable('testUserId');
+    database = testDatabaseProvider('testUserId');
     messageDao = database.messageDao;
   });
 
@@ -32,11 +34,16 @@ void main() {
         shadowed: math.Random().nextBool(),
         replyCount: index,
         updatedAt: DateTime.now(),
-        extraData: {'extra_test_field': 'extraTestData'},
-        text: 'Dummy text #$index',
+        extraData: const {'extra_test_field': 'extraTestData'},
+        text: 'Hello #$index',
         pinned: math.Random().nextBool(),
         pinnedAt: DateTime.now(),
         pinnedBy: User(id: 'testUserId$index'),
+        i18n: {
+          'en_text': 'Hello #$index',
+          'hi_text': 'नमस्ते #$index',
+          'language': 'en',
+        },
       ),
     );
     final quotedMessages = List.generate(
@@ -49,12 +56,17 @@ void main() {
         shadowed: math.Random().nextBool(),
         replyCount: index,
         updatedAt: DateTime.now(),
-        extraData: {'extra_test_field': 'extraTestData'},
-        text: 'Dummy text #$index',
+        extraData: const {'extra_test_field': 'extraTestData'},
+        text: 'Hello #$index',
         quotedMessageId: messages[index].id,
         pinned: math.Random().nextBool(),
         pinnedAt: DateTime.now(),
         pinnedBy: User(id: 'testUserId$index'),
+        i18n: {
+          'en_text': 'Hello #$index',
+          'hi_text': 'नमस्ते #$index',
+          'language': 'en',
+        },
       ),
     );
     final threadMessages = List.generate(
@@ -69,11 +81,16 @@ void main() {
         shadowed: math.Random().nextBool(),
         replyCount: index,
         updatedAt: DateTime.now(),
-        extraData: {'extra_test_field': 'extraTestData'},
-        text: 'Dummy text #$index',
+        extraData: const {'extra_test_field': 'extraTestData'},
+        text: 'Hello #$index',
         pinned: math.Random().nextBool(),
         pinnedAt: DateTime.now(),
         pinnedBy: User(id: 'testUserId$index'),
+        i18n: {
+          'en_text': 'Hello #$index',
+          'hi_text': 'नमस्ते #$index',
+          'language': 'en',
+        },
       ),
     );
     final allMessages = [
@@ -168,7 +185,8 @@ void main() {
 
     // Fetched message id should match the inserted message id
     final fetchedMessage = await messageDao.getMessageById(id);
-    expect(fetchedMessage.id, insertedMessages.first.id);
+    expect(fetchedMessage, isNotNull);
+    expect(fetchedMessage!.id, insertedMessages.first.id);
   });
 
   test('getThreadMessages', () async {
@@ -332,7 +350,7 @@ void main() {
       showInChannel: math.Random().nextBool(),
       replyCount: 4,
       updatedAt: DateTime.now(),
-      extraData: {'extra_test_field': 'extraTestData'},
+      extraData: const {'extra_test_field': 'extraTestData'},
       text: 'Dummy text #4',
       pinned: math.Random().nextBool(),
       pinnedAt: DateTime.now(),
