@@ -204,7 +204,7 @@ class StreamChatClient {
 
   /// The current status value of the [_ws] connection
   ConnectionStatus get wsConnectionStatus =>
-      _wsConnectionStatusController.value;
+      _wsConnectionStatusController!.value!;
 
   /// This notifies the connection status of the [_ws] connection.
   /// Listen to this to get notified when the [_ws] tries to reconnect.
@@ -1458,7 +1458,7 @@ class ClientState {
   void updateUser(User? user) => updateUsers([user]);
 
   /// The current user
-  OwnUser? get currentUser => _currentUserController.valueOrNull;
+  OwnUser? get currentUser => _currentUserController!.value!;
 
   /// The current user as a stream
   Stream<OwnUser?> get currentUserStream => _currentUserController.stream;
@@ -1467,7 +1467,7 @@ class ClientState {
 
   /// The current user
   @Deprecated('Use `.currentUser` instead, Will be removed in future releases')
-  OwnUser? get user => _currentUserController.valueOrNull;
+  OwnUser? get user => _currentUserController!.value!;
 
   /// The current user as a stream
   @Deprecated(
@@ -1478,19 +1478,19 @@ class ClientState {
   // coverage:ignore-end
 
   /// The current user
-  Map<String, User> get users => _usersController.value;
+  Map<String, User> get users => _usersController.value!;
 
   /// The current user as a stream
   Stream<Map<String, User>> get usersStream => _usersController.stream;
 
   /// The current unread channels count
-  int get unreadChannels => _unreadChannelsController.value;
+  int get unreadChannels => _unreadChannelsController.value!;
 
   /// The current unread channels count as a stream
   Stream<int> get unreadChannelsStream => _unreadChannelsController.stream;
 
   /// The current total unread messages count
-  int get totalUnreadCount => _totalUnreadCountController.value;
+  int get totalUnreadCount => _totalUnreadCountController.value!;
 
   /// The current total unread messages count as a stream
   Stream<int> get totalUnreadCountStream => _totalUnreadCountController.stream;
@@ -1499,7 +1499,7 @@ class ClientState {
   Stream<Map<String, Channel>> get channelsStream => _channelsController.stream;
 
   /// The current list of channels in memory
-  Map<String, Channel> get channels => _channelsController.value;
+  Map<String, Channel> get channels => _channelsController.value!;
 
   set channels(Map<String, Channel> channelMap) {
     final newChannels = {...channels, ...channelMap};

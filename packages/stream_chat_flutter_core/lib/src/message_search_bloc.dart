@@ -45,7 +45,7 @@ class MessageSearchBlocState extends State<MessageSearchBloc>
 
   /// The current messages list
   List<GetMessageResponse>? get messageResponses =>
-      _messageResponses.valueOrNull;
+      _messageResponses.value!;
 
   /// The current messages list as a stream
   Stream<List<GetMessageResponse>> get messagesStream =>
@@ -94,7 +94,7 @@ class MessageSearchBlocState extends State<MessageSearchBloc>
         final temp = oldMessages + messages.results;
         _messageResponses.add(temp);
       }
-      if (_messageResponses.hasValue && _queryMessagesLoadingController.value) {
+      if (_messageResponses.hasValue && _queryMessagesLoadingController.value!) {
         _queryMessagesLoadingController.add(false);
       }
     } catch (e, stk) {

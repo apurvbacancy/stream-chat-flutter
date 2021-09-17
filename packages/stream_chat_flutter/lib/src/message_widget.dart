@@ -565,10 +565,10 @@ class _MessageWidgetState extends State<MessageWidget>
       widget.message.attachments.any((element) => element.type == 'giphy') ==
       true;
   bool get isImage =>
-      widget.message.attachments?.any((element) => element.type == 'image') ==
+      widget.message.attachments.any((element) => element.type == 'image') ==
           true;
   bool get isVideo =>
-      widget.message.attachments?.any((element) => element.type == 'video') ==
+      widget.message.attachments.any((element) => element.type == 'video') ==
           true;
 
   bool get isOnlyEmoji => widget.message.text?.isOnlyEmoji == true;

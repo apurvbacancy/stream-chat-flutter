@@ -173,8 +173,8 @@ class StreamChannelState extends State<StreamChannel> {
     _queryTopMessagesController.add(true);
 
     Message? message;
-    if (channel.state!.threads.containsKey(parentId)) {
-      final thread = channel.state!.threads[parentId]!;
+    if (channel.state!.threads!.containsKey(parentId)) {
+      final thread = channel.state!.threads![parentId]!;
       if (thread.isNotEmpty) {
         message = thread.first;
       }

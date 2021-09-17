@@ -129,7 +129,7 @@ class MessageListCoreState extends State<MessageListCore> {
         : _streamChannel!.channel.state?.messagesStream;
 
     final initialData = _isThreadConversation
-        ? _streamChannel!.channel.state?.threads[widget.parentMessage!.id]
+        ? _streamChannel!.channel.state?.threads![widget.parentMessage!.id]
         : _streamChannel!.channel.state?.messages;
 
     bool defaultFilter(Message m) {

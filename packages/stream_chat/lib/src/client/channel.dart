@@ -384,7 +384,7 @@ class Channel {
   ) {
     final message = [
       ...state!.messages,
-      ...state!.threads.values.expand((messages) => messages),
+      ...state!.threads!.values.expand((messages) => messages),
     ].firstWhereOrNull(
       (it) => it.id == messageId,
     );
@@ -1088,7 +1088,7 @@ class Channel {
       } else {
         // remove thread message if present
         // also reduces total reply count
-        final oldMessage = state!.threads.values
+        final oldMessage = state!.threads!.values
             .expand((messages) => messages)
             .firstWhereOrNull((m) => m.id == messageId);
         if (oldMessage?.parentId != null) {
@@ -1100,7 +1100,7 @@ class Channel {
                 replyCount: parentMessage.replyCount! - 1));
           }
           state!.updateThreadInfo(oldMessage!.parentId!,
-              state!.threads[oldMessage.parentId!]!..remove(oldMessage));
+              state!.threads![oldMessage.parentId!]!..remove(oldMessage));
         }
       }
       await _client.chatPersistenceClient?.deleteMessageById(messageId);
@@ -1598,7 +1598,7 @@ class ChannelClientState {
   ///
   /// When false, any new message received by WebSocket event
   /// [EventType.messageNew] will not be pushed on to message list.
-  bool get isUpToDate => _isUpToDateController.value;
+  bool get isUpToDate => _isUpToDateController!.value!;
 
   set isUpToDate(bool isUpToDate) => _isUpToDateController.add(isUpToDate);
 
@@ -1614,7 +1614,7 @@ class ChannelClientState {
   /// Retry failed message.
   Future<void> retryFailedMessages() async {
     final failedMessages =
-        <Message>[...messages, ...threads.values.expand((v) => v)]
+        <Message>[...messages, ...threads!.values.expand((v) => v)]
             .where(
               (message) =>
                   message.status != MessageSendingStatus.sent &&
@@ -1841,7 +1841,7 @@ class ChannelClientState {
   Stream<int> get unreadCountStream => _unreadCountController.stream.distinct();
 
   /// Unread count getter.
-  int get unreadCount => _unreadCountController.value;
+  int get unreadCount => _unreadCountController!.value!;
 
   bool _countMessageAsUnread(Message message) {
     final userId = _channel.client.state.currentUser?.id;
@@ -1858,7 +1858,7 @@ class ChannelClientState {
 
   /// Update threads with updated information about messages.
   void updateThreadInfo(String parentId, List<Message> messages) {
-    final newThreads = Map<String, List<Message>>.from(threads);
+    final newThreads = Map<String, List<Message>>.from(threads!);
 
     if (newThreads.containsKey(parentId)) {
       newThreads[parentId] = [
@@ -1942,13 +1942,13 @@ class ChannelClientState {
       a.createdAt.compareTo(b.createdAt);
 
   /// The channel state related to this client.
-  ChannelState get _channelState => _channelStateController.value;
+  ChannelState get _channelState => _channelStateController!.value!;
 
   /// The channel state related to this client as a stream.
   Stream<ChannelState> get channelStateStream => _channelStateController.stream;
 
   /// The channel state related to this client.
-  ChannelState get channelState => _channelStateController.value;
+  ChannelState get channelState => _channelStateController!.value!;
   late BehaviorSubject<ChannelState> _channelStateController;
 
   final Debounce _debouncedUpdatePersistenceChannelState;
@@ -1959,8 +1959,8 @@ class ChannelClientState {
   }
 
   /// The channel threads related to this channel.
-  Map<String, List<Message>> get threads =>
-      _threadsController.value.map((key, value) => MapEntry(key, value));
+  Map<String, List<Message>>? get threads =>
+      _threadsController.value?.map((key, value) => MapEntry(key, value));
 
   /// The channel threads related to this channel as a stream.
   Stream<Map<String, List<Message>>> get threadsStream =>
@@ -1977,7 +1977,7 @@ class ChannelClientState {
   }
 
   /// Channel related typing users last value.
-  Map<User, Event> get typingEvents => _typingEventsController.value;
+  Map<User, Event> get typingEvents => _typingEventsController!.value!;
 
   /// Channel related typing users stream.
   Stream<Map<User, Event>> get typingEventsStream =>

@@ -43,7 +43,7 @@ class UsersBloc extends StatefulWidget {
 class UsersBlocState extends State<UsersBloc>
     with AutomaticKeepAliveClientMixin {
   /// The current users list
-  List<User>? get users => _usersController.valueOrNull;
+  List<User>? get users => _usersController.value!;
 
   /// The current users list as a stream
   Stream<List<User>> get usersStream => _usersController.stream;
@@ -92,7 +92,7 @@ class UsersBlocState extends State<UsersBloc>
         final temp = oldUsers + usersResponse.users;
         _usersController.add(temp);
       }
-      if (_usersController.hasValue && _queryUsersLoadingController.value) {
+      if (_usersController.hasValue && _queryUsersLoadingController.value!) {
         _queryUsersLoadingController.add(false);
       }
     } catch (e, stk) {
