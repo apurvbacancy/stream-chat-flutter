@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:test/test.dart';
 import 'package:stream_chat/src/core/models/filter.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('operators', () {
@@ -138,6 +138,20 @@ void main() {
       expect(filter.value, value);
     });
 
+    test('empty', () {
+      const filter = Filter.empty();
+      expect(filter.value, {});
+    });
+
+    test('contains', () {
+      const key = 'testKey';
+      const values = 'testValue';
+      final filter = Filter.contains(key, values);
+      expect(filter.key, key);
+      expect(filter.value, values);
+      expect(filter.operator, FilterOperator.contains.rawValue);
+    });
+
     group('groupedOperator', () {
       final filter1 = Filter.equal('testKey', 'testValue');
       final filter2 = Filter.in_('testKey', const ['testValue']);
@@ -211,6 +225,12 @@ void main() {
           encoded,
           json.encode(value),
         );
+      });
+
+      test('empty', () {
+        const filter = Filter.empty();
+        final encoded = json.encode(filter);
+        expect(encoded, '{}');
       });
     });
 

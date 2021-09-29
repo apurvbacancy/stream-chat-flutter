@@ -17,7 +17,7 @@ class OwnUser extends User {
     this.devices = const [],
     this.mutes = const [],
     this.totalUnreadCount = 0,
-    this.unreadChannels,
+    this.unreadChannels = 0,
     this.channelMutes = const [],
     required String id,
     String? role,
@@ -54,8 +54,6 @@ class OwnUser extends User {
   factory OwnUser.fromUser(User user) => OwnUser(
         id: user.id,
         role: user.role,
-        name: user.name,
-        image: user.image,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         lastActive: user.lastActive,
@@ -116,8 +114,6 @@ class OwnUser extends User {
     return copyWith(
       id: other.id,
       role: other.role,
-      name: other.name,
-      image: other.image,
       banned: other.banned,
       channelMutes: other.channelMutes,
       createdAt: other.createdAt,
@@ -151,8 +147,8 @@ class OwnUser extends User {
   final int totalUnreadCount;
 
   /// Total unread channels by the user.
-  @JsonKey(includeIfNull: false)
-  final int? unreadChannels;
+  @JsonKey(includeIfNull: false, defaultValue: 0)
+  final int unreadChannels;
 
   /// Known top level fields.
   ///

@@ -68,29 +68,34 @@ class UserAvatar extends StatelessWidget {
 
     Widget avatar = FittedBox(
       fit: BoxFit.cover,
-      child: ClipRRect(
-        clipBehavior: Clip.antiAlias,
-        borderRadius: borderRadius ??
-            streamChatTheme.ownMessageTheme.avatarTheme?.borderRadius,
-        child: Container(
-          constraints: constraints ??
-              streamChatTheme.ownMessageTheme.avatarTheme?.constraints,
-          decoration: BoxDecoration(
-            color: streamChatTheme.colorTheme.razz,
-          ),
-          child: hasImage
-              ? CachedNetworkImage(
-            fit: BoxFit.cover,
-            filterQuality: FilterQuality.high,
-            imageUrl: user.image!,
-            errorWidget: (context, __, ___) =>
-                streamChatTheme.defaultUserImage(context, user),
-            placeholder: placeholder != null
-                ? (context, __) => placeholder(context, user)
-                : null,
-          )
-              : streamChatTheme.defaultUserImage(context, user),
-        ),
+      child: Container(
+        constraints: constraints ??
+            streamChatTheme.ownMessageTheme.avatarTheme?.constraints,
+        child: hasImage
+            ? CachedNetworkImage(
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.high,
+                imageUrl: user.image!,
+                errorWidget: (context, __, ___) =>
+                    streamChatTheme.defaultUserImage(context, user),
+                placeholder: placeholder != null
+                    ? (context, __) => placeholder(context, user)
+                    : null,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius ??
+                        streamChatTheme
+                            .ownMessageTheme.avatarTheme?.borderRadius,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                ),
+              )
+            : ClipRRect(
+                borderRadius: borderRadius ??
+                    streamChatTheme.ownMessageTheme.avatarTheme?.borderRadius,
+                child: streamChatTheme.defaultUserImage(context, user),
+              ),
       ),
     );
 
@@ -102,9 +107,8 @@ class UserAvatar extends StatelessWidget {
             BorderRadius.circular(selectionThickness),
         child: Container(
           constraints: constraints ??
-              streamChatTheme.ownMessageTheme.avatarTheme!.constraints,
-          color: selectionColor ??
-              StreamChatTheme.of(context).colorTheme.accentPrimary,
+              streamChatTheme.ownMessageTheme.avatarTheme?.constraints,
+          color: selectionColor ?? streamChatTheme.colorTheme.accentPrimary,
           child: Padding(
             padding: EdgeInsets.all(selectionThickness),
             child: avatar,
@@ -124,7 +128,7 @@ class UserAvatar extends StatelessWidget {
                 alignment: onlineIndicatorAlignment,
                 child: Material(
                   type: MaterialType.circle,
-                  color: streamChatTheme.colorTheme.white,
+                  color: streamChatTheme.colorTheme.barsBg,
                   child: Container(
                     margin: const EdgeInsets.all(2),
                     constraints: onlineIndicatorConstraints ??

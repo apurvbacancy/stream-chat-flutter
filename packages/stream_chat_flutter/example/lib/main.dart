@@ -1,113 +1,116 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+// ignore_for_file: public_member_api_docs
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
-import 'package:stream_chat_localizations/stream_chat_localizations.dart';
 
+/// Second step of the [tutorial](https://getstream.io/chat/flutter/tutorial/)
+///
+/// Most chat applications handle more than just one single conversation.
+/// Apps like Facebook Messenger, Whatsapp and Telegram allows you to have
+/// multiple one-to-one and group conversations.
+///
+/// Let’s find out how we can change our application chat screen to display
+/// the list of conversations and navigate between them.
+///
+/// > Note: the SDK uses Flutter’s [Navigator] to move from one route to
+/// another. This allows us to avoid any boiler-plate code.
+/// > Of course, you can take total control of how navigation works by
+/// customizing widgets like [Channel] and [ChannelList].
+///
+/// If you run the application, you will see that the first screen shows a
+/// list of conversations, you can open each by tapping and go back to the list.
+///
+/// Every single widget involved in this UI can be customized or swapped
+/// with your own.
+///
+/// The [ChannelListPage] widget retrieves the list of channels based on a
+/// custom query and ordering. In this case we are showing the list of
+/// channels in which the current user is a member and we order them based
+/// on the time they had a new message. [ChannelListView] handles pagination
+/// and updates automatically when new channels are created or when a new
+/// message is added to a channel.
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  /// Create a new instance of [StreamChatClient] passing the apikey obtained
-  /// from your project dashboard.
   final client = StreamChatClient(
     's2dxdhpxd94g',
     logLevel: Level.INFO,
   );
 
-  /// Set the current user and connect the websocket. In a production
-  /// scenario, this should be done using a backend to generate a user token
-  /// using our server SDK.
-  ///
-  /// Please see the following for more information:
-  /// https://getstream.io/chat/docs/ios_user_setup_and_tokens/
   await client.connectUser(
     User(id: 'super-band-9'),
     '''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoic3VwZXItYmFuZC05In0.0L6lGoeLwkz0aZRUcpZKsvaXtNEDHBcezVTZ0oPq40A''',
   );
 
-  final channel = client.channel('messaging', id: 'godevs');
-
-  await channel.watch();
-
   runApp(
     MyApp(
       client: client,
-      channel: channel,
     ),
   );
 }
 
-/// Example application using Stream Chat Flutter widgets.
-///
-/// Stream Chat Flutter is a set of Flutter widgets which provide full chat
-/// functionalities for building Flutter applications using Stream. If you'd
-/// prefer using minimal wrapper widgets for your app, please see our other
-/// package, `stream_chat_flutter_core`.
 class MyApp extends StatelessWidget {
-  /// Example using Stream's Flutter package.
-  ///
-  /// If you'd prefer using minimal wrapper widgets for your app, please see
-  /// our other package, `stream_chat_flutter_core`.
   const MyApp({
     Key? key,
     required this.client,
-    required this.channel,
   }) : super(key: key);
 
-  /// Instance of Stream Client.
-  ///
-  /// Stream's [StreamChatClient] can be used to connect to our servers and
-  /// set the default user for the application. Performing these actions
-  /// trigger a websocket connection allowing for real-time updates.
   final StreamChatClient client;
 
-  /// Instance of the Channel
-  final Channel channel;
-
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        supportedLocales: const [
-          Locale('en'),
-          Locale('hi'),
-          Locale('fr'),
-          Locale('it'),
-          Locale('es'),
-        ],
-        localizationsDelegates: GlobalStreamChatLocalizations.delegates,
-        builder: (context, widget) => StreamChat(
-          client: client,
-          child: widget,
-        ),
-        home: StreamChannel(
-          channel: channel,
-          child: const ChannelPage(),
-        ),
-      );
+  // ignore: prefer_expression_function_bodies
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      builder: (context, child) => StreamChat(
+        client: client,
+        child: child,
+      ),
+      home: const ChannelListPage(),
+    );
+  }
 }
 
-/// A list of messages sent in the current channel.
-///
-/// This is implemented using [MessageListView], a widget that provides query
-/// functionalities fetching the messages from the api and showing them in a
-/// listView.
+class ChannelListPage extends StatelessWidget {
+  const ChannelListPage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  // ignore: prefer_expression_function_bodies
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ChannelsBloc(
+        child: ChannelListView(
+          filter: Filter.in_(
+            'members',
+            [StreamChat.of(context).currentUser!.id],
+          ),
+          sort: const [SortOption('last_message_at')],
+          pagination: const PaginationParams(
+            limit: 20,
+          ),
+          channelWidget: const ChannelPage(),
+        ),
+      ),
+    );
+  }
+}
+
 class ChannelPage extends StatelessWidget {
-  /// Creates the page that shows the list of messages
   const ChannelPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: const ChannelHeader(),
-        body: Column(
-          children: const <Widget>[
-            Expanded(
-              child: MessageListView(),
-            ),
-            MessageInput(attachmentLimit: 3),
-          ],
-        ),
-      );
+  // ignore: prefer_expression_function_bodies
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const ChannelHeader(),
+      body: Column(
+        children: const <Widget>[
+          Expanded(
+            child: MessageListView(),
+          ),
+          MessageInput(),
+        ],
+      ),
+    );
+  }
 }

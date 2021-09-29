@@ -91,8 +91,8 @@ class MessageDetails {
   final int index;
 }
 
-/// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/message_listview.png)
-/// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/screenshots/message_listview_paint.png)
+/// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/packages/stream_chat_flutter/screenshots/message_listview.png)
+/// ![screenshot](https://raw.githubusercontent.com/GetStream/stream-chat-flutter/master/packages/stream_chat_flutter/screenshots/message_listview_paint.png)
 ///
 /// It shows the list of messages of the current channel.
 ///
@@ -505,14 +505,18 @@ class _MessageListViewState extends State<MessageListView> {
                       return _buildThreadSeparator();
                     }
                     if (i == itemCount - 3) {
-                      if (widget.headerBuilder == null) {
+                      if (widget.reverse
+                          ? widget.headerBuilder == null
+                          : widget.footerBuilder == null) {
                         if (_isThreadConversation) return const Offstage();
                         return const SizedBox(height: 52);
                       }
                       return const SizedBox(height: 8);
                     }
                     if (i == 0) {
-                      if (widget.footerBuilder == null) {
+                      if (widget.reverse
+                          ? widget.footerBuilder == null
+                          : widget.headerBuilder == null) {
                         return const SizedBox(height: 30);
                       }
                       return const SizedBox(height: 8);
@@ -536,13 +540,13 @@ class _MessageListViewState extends State<MessageListView> {
                           ? widget.dateDividerBuilder!(
                               nextMessage.createdAt.toLocal(),
                             )
-                          : DateDivider(
-                              dateTime: nextMessage.createdAt.toLocal(),
+                          : Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: DateDivider(
+                                dateTime: nextMessage.createdAt.toLocal(),
+                              ),
                             );
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: divider,
-                      );
+                      return divider;
                     }
                     final timeDiff =
                         Jiffy(nextMessage.createdAt.toLocal()).diff(
@@ -571,8 +575,13 @@ class _MessageListViewState extends State<MessageListView> {
                     }
 
                     if (i == itemCount - 2) {
-                      return widget.headerBuilder?.call(context) ??
-                          const Offstage();
+                      if (widget.reverse) {
+                        return widget.headerBuilder?.call(context) ??
+                            const Offstage();
+                      } else {
+                        return widget.footerBuilder?.call(context) ??
+                            const Offstage();
+                      }
                     }
 
                     if (i == itemCount - 3) {
@@ -590,8 +599,13 @@ class _MessageListViewState extends State<MessageListView> {
                     }
 
                     if (i == 0) {
-                      return widget.footerBuilder?.call(context) ??
-                          const Offstage();
+                      if (widget.reverse) {
+                        return widget.footerBuilder?.call(context) ??
+                            const Offstage();
+                      } else {
+                        return widget.headerBuilder?.call(context) ??
+                            const Offstage();
+                      }
                     }
 
                     const bottomMessageIndex = 2; // 1 -> loader // 0 -> footer
@@ -1002,7 +1016,7 @@ class _MessageListViewState extends State<MessageListView> {
     final isOnlyEmoji = message.text?.isOnlyEmoji ?? false;
 
     final hasUrlAttachment =
-        message.attachments.any((it) => it.ogScrapeUrl != null) == true;
+        message.attachments.any((it) => it.titleLink != null) == true;
 
     final borderSide =
         isOnlyEmoji || hasUrlAttachment || (isMyMessage && !hasFileAttachment)
@@ -1210,10 +1224,12 @@ class _MessageListViewState extends State<MessageListView> {
       initialAlignment = _initialAlignment;
 
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-        _scrollController?.jumpTo(
-          index: initialIndex,
-          alignment: initialAlignment,
-        );
+        if (_scrollController?.isAttached == true) {
+          _scrollController?.jumpTo(
+            index: initialIndex,
+            alignment: initialAlignment,
+          );
+        }
       });
 
       _messageNewListener =

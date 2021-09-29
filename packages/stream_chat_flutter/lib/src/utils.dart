@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stream_chat_flutter/src/extension.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:stream_chat_flutter/src/extension.dart';
 
 /// Launch URL
-Future<void> launchURL(BuildContext context, String? url) async {
-  if (url != null && await canLaunch(url)) {
+Future<void> launchURL(BuildContext context, String url) async {
+  if (await canLaunch(url)) {
     await launch(url);
   } else {
     ScaffoldMessenger.of(context).showSnackBar(

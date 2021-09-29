@@ -1,3 +1,32 @@
+## 3.0.0
+
+🛑️ Breaking Changes from `2.2.1`
+
+- Added 6 new methods in `ChatPersistenceClient`.
+    - `bulkUpdateMessages`
+    - `bulkUpdatePinnedMessages`
+    - `bulkUpdateMembers`
+    - `bulkUpdateReads`
+    - `updatePinnedMessageReactions`
+    - `deletePinnedMessageReactionsByMessageId`
+
+✅ Added
+
+- Added `Filter.contains` and `Filter.empty`
+- Added support for `next`, `previous` value pagination in `client.search`
+  , [read more.](https://getstream.io/chat/docs/other-rest/search/#pagination)
+- `Attachment` class now has a `fileSize` and `mimeType` property. Setting a `file` will also set the `file_size`
+  , `mime_type` key on `extraData`, so `attachment.fileSize`, `attachment.mimetype`
+  and `attachment.extraData['file_size']`
+  , `attachment.extraData['mime_type]` is same respectively.
+
+🐞 Fixed
+
+- [[#659]](https://github.com/GetStream/stream-chat-flutter/issues/659) Fixed unread count not updating correctly.
+- Fix `Filter.empty()` json encoding.
+- [[#700]](https://github.com/GetStream/stream-chat-flutter/issues/700) Connecting user without providing `name`
+  uses `id` instead for setting `user.name`.
+
 ## 2.2.1
 
 🐞 Fixed
@@ -13,11 +42,16 @@
 
 ✅ Added
 
-- `User` and `OwnUser` classes now have an `image` property. Setting an image will also set the 'image' key on `extraData`, so `user.image` and `user.extraData['image']` is the same.
-- `User` and `OwnUser` classes now have a `name` property. Setting a name will also set the 'name' key on `extraData`, so `user.name` and `user.extraData['name']` is the same.
-- `Channel` class now has extra `image` getter and setter. As well as an `updateImage` to do a partial update after a channel has been initialized.
-- `Channel` class now has extra `name` getter and setter. As well as an `updateName` to do a partial update after a channel has been initialized.
+- `User` and `OwnUser` classes now have an `image` property. Setting an image will also set the 'image' key
+  on `extraData`, so `user.image` and `user.extraData['image']` is the same.
+- `User` and `OwnUser` classes now have a `name` property. Setting a name will also set the 'name' key on `extraData`,
+  so `user.name` and `user.extraData['name']` is the same.
+- `Channel` class now has extra `image` getter and setter. As well as an `updateImage` to do a partial update after a
+  channel has been initialized.
+- `Channel` class now has extra `name` getter and setter. As well as an `updateName` to do a partial update after a
+  channel has been initialized.
 - Added slow mode which allows a cooldown period after a user sends a message.
+
 ## 2.1.1
 
 🐞 Fixed
@@ -42,7 +76,7 @@
 
 🐞 Fixed
 
-- [#563](https://github.com/GetStream/stream-chat-flutter/issues/563): `Channel.stopWatching()` not working 
+- [#563](https://github.com/GetStream/stream-chat-flutter/issues/563): `Channel.stopWatching()` not working
 - [#575](https://github.com/GetStream/stream-chat-flutter/issues/575): Wrong `OwnUser.*`
 
 ## 2.0.0
@@ -70,10 +104,10 @@
 
 🐞 Fixed
 
-- [#369](https://github.com/GetStream/stream-chat-flutter/issues/369): Client does not return without internet connection
+- [#369](https://github.com/GetStream/stream-chat-flutter/issues/369): Client does not return without internet
+  connection
 - several minor fixes
 - performance improvements
-
 
 ✅ Added
 
@@ -89,6 +123,7 @@
 ## 2.0.0-nullsafety.8
 
 🐞 Fixed
+
 - Export `PushProvider` enum
 
 ## 2.0.0-nullsafety.7
@@ -124,6 +159,7 @@
 
 - Fix thread reply not working with attachments
 - Minor fixes
+
 ## 2.0.0-nullsafety.5
 
 - Minor fixes

@@ -51,6 +51,9 @@ enum FilterOperator {
 
   /// Matches none of the values specified in an array.
   nor,
+
+  /// Matches any list that contains the specified value
+  contains,
 }
 
 /// Helper extension for [FilterOperator]
@@ -71,6 +74,7 @@ extension FilterOperatorX on FilterOperator {
         FilterOperator.and: '\$and',
         FilterOperator.or: '\$or',
         FilterOperator.nor: '\$nor',
+        FilterOperator.contains: '\$contains',
       }[this]!;
 }
 
@@ -97,6 +101,12 @@ class Filter extends Equatable {
     required this.value,
     this.key,
   }) : operator = operator.rawValue;
+
+  /// An empty filter
+  const Filter.empty()
+      : value = const <String, Object?>{},
+        operator = null,
+        key = null;
 
   /// Combines the provided filters and matches the values
   /// matched by all filters.
@@ -156,6 +166,10 @@ class Filter extends Equatable {
   /// Matches values that exist/don't exist based on the specified boolean value.
   factory Filter.exists(String key, {bool exists = true}) =>
       Filter._(operator: FilterOperator.exists, key: key, value: exists);
+
+  /// Matches any list that contains the specified values
+  factory Filter.contains(String key, Object value) =>
+      Filter._(operator: FilterOperator.contains, key: key, value: value);
 
   /// Creates a custom [Filter] if there isn't one already available.
   const factory Filter.custom({
