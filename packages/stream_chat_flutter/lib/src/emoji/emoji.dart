@@ -114275,16 +114275,16 @@ class Emoji {
           const ListEquality().equals(keywords, other.keywords) &&
           modifiable == other.modifiable;
 
-  @override
-  int get hashCode => Object.hash(
-        name.hashCode,
-        char.hashCode,
-        shortName.hashCode,
-        emojiGroup.hashCode,
-        emojiSubgroup.hashCode,
-        keywords.hashCode,
-        modifiable.hashCode,
-      );
+  // @override
+  // int get hashCode => Object.hash(
+  //       name.hashCode,
+  //       char.hashCode,
+  //       shortName.hashCode,
+  //       emojiGroup.hashCode,
+  //       emojiSubgroup.hashCode,
+  //       keywords.hashCode,
+  //       modifiable.hashCode,
+  //     );
 
   /// Runes of Emoji Character
   List<int> get charRunes {

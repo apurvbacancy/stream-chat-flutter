@@ -619,8 +619,8 @@ class _MessageActionsModalState extends State<MessageActionsModal> {
                     : Padding(
                   padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
                   child: MessageInput(
-                    sendMessageIcon:widget.sendMessageIcon ,
-                    sendMessageIconIdle: widget.sendMessageIconIdle,
+                    // sendMessageIcon:widget.sendMessageIcon ,
+                    // sendMessageIconIdle: widget.sendMessageIconIdle,
                     editMessage: widget.message,
                     preMessageSending: (m) {
                       FocusScope.of(context).unfocus();
