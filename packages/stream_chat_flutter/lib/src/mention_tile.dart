@@ -68,19 +68,19 @@ class MentionTile extends StatelessWidget {
                   SizedBox(
                     height: 2.0,
                   ),
-                  subtitle ??
-                      Text(
-                        '@${member.userId}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: StreamChatTheme.of(context)
-                            .textTheme
-                            .footnoteBold
-                            .copyWith(
-                              color:
-                                  StreamChatTheme.of(context).colorTheme.grey,
-                            ),
-                      ),
+                  // subtitle ??
+                  //     Text(
+                  //       '@${member.userId}',
+                  //       maxLines: 1,
+                  //       overflow: TextOverflow.ellipsis,
+                  //       style: StreamChatTheme.of(context)
+                  //           .textTheme
+                  //           .footnoteBold
+                  //           .copyWith(
+                  //             color:
+                  //                 StreamChatTheme.of(context).colorTheme.grey,
+                  //           ),
+                  //     ),
                 ],
               ),
             ),
