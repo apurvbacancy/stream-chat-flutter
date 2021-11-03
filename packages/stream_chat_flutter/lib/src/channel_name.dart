@@ -12,13 +12,10 @@ class ChannelName extends StatelessWidget {
   const ChannelName({
     Key key,
     this.textStyle,
-    this.calledFromChannelHeader
   }) : super(key: key);
 
   /// The style of the text displayed
   final TextStyle textStyle;
-  final bool calledFromChannelHeader;
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +69,7 @@ class ChannelName extends StatelessWidget {
         }
 
         return Text(
-          calledFromChannelHeader==true?"@"+title:title,
+          title.startsWith('@')?title:'@'+title,
           style: textStyle,
           overflow: TextOverflow.ellipsis,
         );

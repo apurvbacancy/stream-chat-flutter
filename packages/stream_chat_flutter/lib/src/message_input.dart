@@ -2004,6 +2004,7 @@ class MessageInputState extends State<MessageInput> {
         pickedFile = await _imagePicker.getVideo(source: ImageSource.camera);
       }
       if (pickedFile == null) {
+        setState(() => _inputEnabled = true);
         return;
       }
       final bytes = await pickedFile.readAsBytes();
@@ -2445,9 +2446,8 @@ class __PickerWidgetState extends State<_PickerWidget> {
         future: requestPermission,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: Color(0xFFE31469)));
           }
-
           if (snapshot.data) {
             if (widget.containsFile) {
               return GestureDetector(

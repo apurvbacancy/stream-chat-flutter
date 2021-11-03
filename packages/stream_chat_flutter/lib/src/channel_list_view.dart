@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -193,7 +194,8 @@ class _ChannelListViewState extends State<ChannelListView> {
 
   Widget _buildListView(BuildContext context, List<Channel> channels) {
     Widget child;
-
+    channels = channels.map((channel) => channel?.state?.channelState?.messages!=null && channel?.state?.channelState?.messages?.length!=0?channel:null).toList();
+    channels.removeWhere((element) => element==null);
     if (channels.isNotEmpty) {
       if (widget.crossAxisCount > 1) {
         child = GridView.builder(
@@ -225,10 +227,15 @@ class _ChannelListViewState extends State<ChannelListView> {
       }
     }
 
-    return AnimatedSwitcher(
+    // return AnimatedSwitcher(
+    //   duration: const Duration(milliseconds: 500),
+    //   child: child,
+    // );
+
+    return channels.isNotEmpty?AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
       child: child,
-    );
+    ):_buildEmptyWidget(context);
   }
 
   Widget _buildEmptyWidget(BuildContext context) {
@@ -477,7 +484,7 @@ class _ChannelListViewState extends State<ChannelListView> {
         onTap = (client, _) {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) {
                 return StreamChannel(
                   channel: client,
