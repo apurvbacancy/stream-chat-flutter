@@ -27,6 +27,10 @@ import 'extension.dart';
 import 'quoted_message_widget.dart';
 import 'video_thumbnail_image.dart';
 
+// call back function for log event
+typedef void messageStringCallback(String message);
+
+
 typedef AttachmentThumbnailBuilder = Widget Function(
   BuildContext,
   Attachment,
@@ -134,7 +138,9 @@ class MessageInput extends StatefulWidget {
     this.showCommandsButton = true,
     this.mentionsTileBuilder,
     this.sendMessageIcon,
-    this.sendMessageIconIdle
+    this.sendMessageIconIdle,
+    this.messageSentEvent,
+    this.isEventLogMethodSet
   }) : super(key: key);
 
   /// Message to edit
@@ -210,6 +216,9 @@ class MessageInput extends StatefulWidget {
   /// Send Icon idle
   final Widget sendMessageIconIdle;
 
+  /// event log
+  final messageStringCallback messageSentEvent;
+  bool isEventLogMethodSet = false;
 
   @override
   MessageInputState createState() => MessageInputState();
@@ -2249,6 +2258,9 @@ class MessageInputState extends State<MessageInput> {
     return sendingFuture.then((resp) {
       if (resp.message?.type == 'error') {
         _parseExistingMessage(message);
+      }
+      else if(widget.isEventLogMethodSet){
+        widget.messageSentEvent(text);
       }
       if (widget.onMessageSent != null) {
         widget.onMessageSent(resp.message);
