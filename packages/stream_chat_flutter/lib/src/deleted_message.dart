@@ -61,6 +61,7 @@ class DeletedMessage extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               'Message deleted',
+              semanticsLabel: "message_deleted",
               style: messageTheme.messageText.copyWith(
                 fontStyle: FontStyle.italic,
                 color: Colors.white,
