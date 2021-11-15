@@ -74,6 +74,7 @@ class _MediaListViewState extends State<MediaListView> {
                       image: MediaThumbnailProvider(
                         media: media,
                       ),
+                      imageSemanticLabel: "chat_video_($position)",
                       fit: BoxFit.cover,
                     ),
                   ),
