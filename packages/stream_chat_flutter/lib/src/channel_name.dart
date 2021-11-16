@@ -71,6 +71,7 @@ class ChannelName extends StatelessWidget {
         return Text(
           title.startsWith('@')?title:'@'+title,
           style: textStyle,
+          semanticsLabel: title.startsWith('@')?title:'@'+title,
           overflow: TextOverflow.ellipsis,
         );
       },
