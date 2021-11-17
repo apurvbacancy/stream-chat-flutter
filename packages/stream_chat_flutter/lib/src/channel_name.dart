@@ -12,11 +12,13 @@ class ChannelName extends StatelessWidget {
   const ChannelName({
     Key key,
     this.textStyle,
+    this.onTap,
   }) : super(key: key);
 
   /// The style of the text displayed
   final TextStyle textStyle;
-
+  /// The onTap for locators
+  final void Function(Channel) onTap;
   @override
   Widget build(BuildContext context) {
     final client = StreamChat.of(context);
@@ -26,7 +28,7 @@ class ChannelName extends StatelessWidget {
       stream: channel.extraDataStream,
       initialData: channel.extraData,
       builder: (context, snapshot) {
-        return _buildName(snapshot.data, channel.state.members, client);
+        return _buildName(snapshot.data, channel.state.members, client,channel);
       },
     );
   }
@@ -35,6 +37,7 @@ class ChannelName extends StatelessWidget {
     Map<String, dynamic> extraData,
     List<Member> members,
     StreamChatState client,
+      Channel channel
   ) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -68,11 +71,14 @@ class ChannelName extends StatelessWidget {
           title = extraData['name'];
         }
 
-        return Text(
-          title.startsWith('@')?title:'@'+title,
-          style: textStyle,
-          semanticsLabel: title.startsWith('@')?title:'@'+title,
-          overflow: TextOverflow.ellipsis,
+        return InkWell(
+          onTap: () => onTap(channel),
+          child: Text(
+            title.startsWith('@')?title:'@'+title,
+            style: textStyle,
+            semanticsLabel: title.startsWith('@')?title:'@'+title,
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       },
     );

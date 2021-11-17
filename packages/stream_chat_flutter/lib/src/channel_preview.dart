@@ -94,6 +94,7 @@ class ChannelPreview extends StatelessWidget {
                   Flexible(
                     child: title ??
                         ChannelName(
+                          onTap: (channel) => onTap(channel),
                           textStyle: channelPreviewTheme.title.copyWith(
                               fontFamily: 'Poppins',
                               fontSize: ScreenUtil().setSp(16.0),
