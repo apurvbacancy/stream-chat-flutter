@@ -13,12 +13,14 @@ class ChannelName extends StatelessWidget {
     Key key,
     this.textStyle,
     this.onTap,
+    this.titleClick,
   }) : super(key: key);
 
   /// The style of the text displayed
   final TextStyle textStyle;
   /// The onTap for locators
   final void Function(Channel) onTap;
+  final bool titleClick;
   @override
   Widget build(BuildContext context) {
     final client = StreamChat.of(context);
@@ -71,14 +73,21 @@ class ChannelName extends StatelessWidget {
           title = extraData['name'];
         }
 
-        return InkWell(
-          onTap: () => onTap(channel),
+        return titleClick ?
+        InkWell(
+          onTap: () =>onTap(channel),
           child: Text(
             title.startsWith('@')?title:'@'+title,
             style: textStyle,
             semanticsLabel: title.startsWith('@')?title:'@'+title,
             overflow: TextOverflow.ellipsis,
           ),
+        ):
+        Text(
+          title.startsWith('@')?title:'@'+title,
+          style: textStyle,
+          semanticsLabel: title.startsWith('@')?title:'@'+title,
+          overflow: TextOverflow.ellipsis,
         );
       },
     );

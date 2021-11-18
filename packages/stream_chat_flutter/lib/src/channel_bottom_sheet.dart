@@ -47,6 +47,7 @@ class _ChannelBottomSheetState extends State<ChannelBottomSheet> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: ChannelName(
+                      titleClick: false,
                       textStyle:
                           StreamChatTheme.of(context).textTheme.headlineBold,
                     ),

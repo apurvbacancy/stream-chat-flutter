@@ -225,6 +225,7 @@ class ChannelHeader extends StatelessWidget implements PreferredSizeWidget {
                               fontSize: ScreenUtil().setSp(16.0),
                               fontFamily: 'Poppins'
                           ),
+                          titleClick: false,
                         ),
                     // subtitle ??
                     //     ChannelInfo(

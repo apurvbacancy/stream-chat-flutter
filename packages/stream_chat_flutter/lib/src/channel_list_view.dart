@@ -612,6 +612,7 @@ class _ChannelListViewState extends State<ChannelListView> {
             child: StreamChannel(
               channel: channel,
               child: ChannelName(
+                titleClick: false,
                 textStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
